@@ -1,52 +1,52 @@
 ---
 name: analysis-bundle-for-performance-experiments
-description: Use to package a performance experiment into a reusable analysis bundle for offline analysis, review, and sharing.
+description: 当需要把一次性能实验整理成可离线分析、可 review、可共享的分析包时使用。
 ---
 
-# Analysis Bundle For Performance Experiments
+# 性能实验分析包
 
-## Goal
+## 目标
 
-Turn a performance experiment into a stable, evidence-complete analysis bundle instead of leaving behind only averages or a few charts.
+把一次性能实验整理成稳定、证据完整的分析包，而不是只留下平均值或几张图。
 
-## Minimum Inputs
+## 最少输入
 
-- input samples or candidate points
-- workload or request definitions
-- raw execution results
-- aggregated summary
+- 输入样本或候选点
+- 负载或请求定义
+- 原始执行结果
+- 聚合摘要
 
-## Output Layout
+## 输出布局
 
 - `inputs/`
-  - input samples
-  - workload
-  - generation scripts
+  - 输入样本
+  - 负载定义
+  - 生成脚本
 - `results/raw/`
-  - raw records
-  - summary
+  - 原始记录
+  - 原始摘要
 - `results/derived/`
-  - input-size tables
-  - request catalog
-  - per-item comparison tables
-  - aggregated comparison tables
+  - 输入规模表
+  - 请求目录
+  - 单项对比表
+  - 聚合对比表
 - `README.md`
-  - experiment objective
-  - execution method
-  - metric definitions
-  - directory guide
+  - 实验目标
+  - 执行方法
+  - 指标定义
+  - 目录说明
 
-## Workflow
+## 工作流
 
-1. Organize the input samples and preserve the size information for each sample.
-2. Organize the workload or request definitions, including names, parameters, and text.
-3. Run the experiment and keep the raw records instead of saving only averages.
-4. Generate per-item comparison tables that connect input size to latency.
-5. Generate an aggregated summary for quick comparison.
-6. Write a `README.md` that explains the experiment objective, execution method, and metric definitions.
+1. 整理输入样本，并保留每个样本的规模信息。
+2. 整理负载或请求定义，包含名称、参数和文本内容。
+3. 运行实验并保存原始记录，不要只保留平均值。
+4. 生成把输入规模和延迟连接起来的单项对比表。
+5. 生成用于快速对比的聚合摘要。
+6. 编写 `README.md`，说明实验目标、执行方法和指标定义。
 
-## Core Requirements
+## 核心要求
 
-1. Raw records must be retained. Do not keep only averages.
-2. Input-size information must be stored alongside latency results, or later performance differences will be hard to explain.
-3. The final deliverable should let someone review the analysis bundle directory alone and still reconstruct the experiment inputs, execution method, and main conclusions.
+1. 必须保留原始记录，不能只留下平均值。
+2. 输入规模信息必须和延迟结果一起保存，否则后续很难解释性能差异。
+3. 最终交付物应当让别人仅凭分析包目录，就能重建实验输入、执行方法和主要结论。

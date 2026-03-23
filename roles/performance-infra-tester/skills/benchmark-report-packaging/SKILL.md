@@ -1,39 +1,39 @@
 ---
 name: benchmark-report-packaging
-description: Use to turn benchmark results, charts, and fixed-point cases into a deliverable analysis report.
+description: 当需要把 benchmark 结果、图表和固定点案例整理成可交付分析报告时使用。
 ---
 
-# Benchmark Report Packaging
+# Benchmark 报告打包
 
-## Goal
+## 目标
 
-Turn raw benchmark results into a final report where data leads, charts support the story, and conclusions are explained, instead of merely stacking figures or reporting peak values.
+把原始 benchmark 结果组织成一份“数据主导、图表辅助、结论有解释”的最终报告，而不是简单堆图或只报峰值。
 
-## Workflow
+## 工作流
 
-1. Split scenarios by semantic variables and deployment variables before writing conclusions.
-2. In each section, present data tables before charts.
-3. Prefer line charts for trends and bar charts for summaries. Do not default to heatmaps unless density itself is the point.
-4. Under every chart, add a short explanation that answers at least three questions:
-   - What question is this chart answering?
-   - What is the main trend?
-   - Why does that trend matter?
-5. End each section with a short summary that pulls the section's main thread together.
-6. If there are fixed-point case studies, keep them in the main body and surface the key takeaway at the start of the final judgment.
-7. If the report needs to align with a reference report, do not change only the headings:
-   - align the heading style as well
-   - align the section order
-   - align the summary style
-   - align the chart placement
-   - align the explanation density
+1. 写结论前，先按语义变量和部署变量拆分场景。
+2. 每个章节中先给数据表，再给图表。
+3. 趋势优先用折线图，总结优先用柱状图；除非密度本身就是重点，否则不要默认用热力图。
+4. 每张图下都要补一段短解释，至少回答三个问题：
+   - 这张图在回答什么问题？
+   - 主要趋势是什么？
+   - 为什么这个趋势重要？
+5. 每个章节结尾都用一小段总结把主线收住。
+6. 如果有固定点案例分析，应保留在正文里，并在最终判断开头先点明关键结论。
+7. 如果报告需要对齐某份参考报告，不要只对齐标题：
+   - 对齐标题风格
+   - 对齐章节顺序
+   - 对齐总结方式
+   - 对齐图表位置
+   - 对齐解释密度
 
-## Recommended Section Order
+## 推荐章节顺序
 
-1. Document objective
-2. Scenarios and test method
-3. Executive summary
-4. Performance results
-5. `perf` or resource-side supplements
-6. Mechanism explanation
-7. Final judgment
-8. Appendix or raw files
+1. 文档目标
+2. 场景与测试方法
+3. 执行摘要
+4. 性能结果
+5. `perf` 或资源侧补充
+6. 机制解释
+7. 最终判断
+8. 附录或原始文件

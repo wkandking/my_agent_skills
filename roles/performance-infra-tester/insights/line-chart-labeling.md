@@ -1,7 +1,7 @@
-# Labeling Dense Line Charts
+# 密集折线图标注
 
-- When a benchmark line chart contains many closely spaced series, prefer direct end-of-line labels instead of putting the legend off in a corner.
-- Keep label colors aligned with the corresponding line colors.
-- Leave extra whitespace on the right side of the chart so end labels do not get clipped.
-- Apply basic vertical collision avoidance to end labels to reduce overlap.
-- For bar charts or charts with only a few series, a separate legend can still be appropriate.
+- 当 benchmark 折线图包含大量彼此接近的序列时，优先使用线尾直标，而不是把图例放在角落。
+- 标签颜色应与对应折线颜色保持一致。
+- 图表右侧应预留额外留白，避免线尾标签被裁切。
+- 对线尾标签做基础的纵向避让，减少互相遮挡。
+- 如果是柱状图或序列很少的图，独立图例依然可能更合适。

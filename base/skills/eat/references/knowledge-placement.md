@@ -1,207 +1,210 @@
-# Knowledge Placement Guide
+# 知识放置指南
 
-Use this guide when deciding where extracted knowledge belongs.
+当你决定提取出的知识该放到哪里时，使用本指南。
 
-All destination paths should be resolved under the chosen knowledge-root directory.
+所有目标路径都应在选定的知识根目录下解析。
 
-## Target Root Resolution
+## 目标根目录解析
 
-Resolve the target root like this:
+按以下规则解析目标根目录：
 
-1. If the user uses `/eat` with no argument, use the current project root.
-2. If the user uses `/eat project`, use the current project root.
-3. If the user uses `/eat home`, resolve it to `$HOME/my_agent_skills`.
-4. In `home` mode, `$HOME/my_agent_skills` is a container root:
-   - shared knowledge should normally go under `base/`
-   - role-specific knowledge should go under `roles/<role>/`
-5. `eat` does not accept arbitrary path arguments or ordinary folder names as target roots.
-6. Only `project` and `home` are valid explicit target aliases.
+1. 用户使用 `/eat` 且不带参数时，目标根目录是当前项目根目录
+2. 用户使用 `/eat project` 时，目标根目录是当前项目根目录
+3. 用户使用 `/eat home` 时，目标根目录解析为 `$HOME/my_agent_skills`
+4. 在 `home` 模式下，`$HOME/my_agent_skills` 是容器根：
+   - 共享知识通常放到 `base/`
+   - 角色知识通常放到 `roles/<role>/`
+5. `eat` 不接受任意路径参数或普通目录名作为目标根目录
+6. 只有 `project` 和 `home` 是合法的显式目标别名
 
-Examples:
+示例：
 
-- `/eat` -> current project root
-- `/eat project` -> current project root
+- `/eat` -> 当前项目根目录
+- `/eat project` -> 当前项目根目录
 - `/eat home` -> `$HOME/my_agent_skills`
 
-## Source Ingestion Rules
+## 来源摄取规则
 
-Choose sources in this order:
+按以下顺序选择来源：
 
-1. explicit source named by the user
-2. the most recent attachment group
-3. the current conversation
+1. 用户明确点名的来源
+2. 最近一组附件
+3. 当前会话
 
-Supported source types:
+支持的来源类型：
 
-- files
-- directories and repositories
-- attached images
-- local image paths
-- PDFs and documents
-- URLs
-- pasted text
+- 文件
+- 目录和代码仓库
+- 附件图片
+- 本地图像路径
+- PDF 和文档
+- URL
+- 粘贴文本
 
-For the most recent attachment group:
+对于最近一组附件：
 
-- treat the group as a set rather than a single last attachment
-- summarize each source separately
-- then produce one merged conclusion
+- 把整组附件当成一个集合，而不是只看最后一个
+- 先分别总结每个来源
+- 再给出一份合并结论
 
-For mixed groups:
+对混合来源：
 
-- process the readable source types
-- skip unsupported or unreadable sources with a brief reason
-- do not drop the whole group because one source failed
+- 处理所有可可靠读取的来源
+- 对不支持或不可读来源给出简短跳过原因
+- 不要因为一个来源失败就放弃整组
 
-## First Decision: Shared Or Role-Specific
+## 第一层判断：共享还是角色私有
 
-Choose shared knowledge when the rule, pattern, or workflow can help many agents regardless of role.
+符合以下情况时，应视为共享知识：
 
-Choose role-specific knowledge when it depends on:
+- 规则、模式或流程对多个角色都有帮助
+- 不依赖特定角色的职责或解释口径
 
-- a role's scope or ownership
-- tools mainly used by one role
-- domain-specific interpretation rules
-- reporting or evidence standards unique to one role
+符合以下情况时，应视为角色知识：
 
-If the item is useful only inside one role, prefer `<root>/roles/<role>/...` over shared root-level files.
+- 依赖某个角色的职责边界
+- 主要使用某个角色特有工具
+- 依赖特定领域解释规则
+- 依赖某个角色独有的报告或证据标准
 
-## Destination Guide
+如果一个知识项只在单个角色内部有意义，优先放 `<root>/roles/<role>/...`，而不是共享层。
+
+## 目标位置指南
 
 ### `AGENTS.md`
 
-Use `AGENTS.md` for entry-point guidance that an agent should see early:
+把以下类型内容放到 `AGENTS.md`：
 
-- repository layout rules
-- loading rules
-- short operating notes
-- common environment workarounds
-- rules about where to store knowledge
+- 入口级加载规则
+- 仓库布局规则
+- 高频、短小的操作提示
+- 通用环境绕行规则
+- “知识该放哪”这种入口提示
 
-Good fit:
+适合：
 
-- "If network access fails, retry through the proxy on port `7741`."
-- "Load shared guidance before role-specific knowledge."
+- “先加载共享知识，再加载角色知识”
+- “网络失败时优先走某代理端口”
 
-Bad fit:
+不适合：
 
-- long rationale-heavy essays
-- one-time incidents
-- full workflows with many steps
+- 长篇背景解释
+- 一次性事件
+- 多步骤完整流程
 
 ### `principles/`
 
-Use `principles/` for durable rules that should remain true across many tasks:
+放长期有效的稳定规则：
 
-- decision rules
-- interpretation rules
-- strong behavioral constraints
-- evidence standards
+- 决策规则
+- 解释规则
+- 强行为约束
+- 证据标准
 
-Good fit:
+适合：
 
-- "Prefer shared knowledge unless the task is clearly role-specific."
-- "Do not treat environment drift as proof of a product defect."
+- “优先使用共享知识，除非任务明显属于某个角色”
+- “不要把环境漂移直接当成产品缺陷证据”
 
-Bad fit:
+不适合：
 
-- temporary operational tips
-- historical narratives
+- 短期临时技巧
+- 纯历史叙述
 
 ### `insights/`
 
-Use `insights/` for generalized patterns learned from repeated work:
+放从重复工作中提炼出的模式：
 
-- heuristics
-- common failure modes
-- tradeoff patterns
-- signals that often predict a class of problem
+- 启发式
+- 常见失败模式
+- 权衡模式
+- 可预测某类问题的信号
 
-Good fit:
+适合：
 
-- "When a user correction changes scope twice, capture the stable constraint separately before continuing."
-- "Repeated benchmark variance often points to environment noise before application regressions."
+- “多次 benchmark 抖动往往先指向环境噪声，而不是应用回归”
+- “用户两次改范围时，应先单独抽取稳定约束”
 
-Bad fit:
+不适合：
 
-- single incidents with no broader pattern
-- rules that should be phrased as hard constraints
+- 没有泛化价值的单次事件
+- 本应写成硬规则的内容
 
 ### `experience/`
 
-Use `experience/` for concrete history:
+放具体历史事件：
 
-- incidents
-- postmortems
-- one-time decisions
-- retrospectives
+- 事故
+- 复盘
+- 一次性决策
+- 具体回顾
 
-Good fit:
+适合：
 
-- "Proxy port `7741` was required during the March 2026 outage because direct network access was blocked."
-- "A previous plan overfit to one role and had to be split into shared and role-specific guidance."
+- “2026 年 3 月某次故障期间必须走 7741 代理端口”
+- “曾有一次方案把角色私有知识误放到共享层，后来被拆分”
 
-Bad fit:
+不适合：
 
-- generic advice without a specific incident
-- workflows intended for reuse
+- 缺少具体事件背景的泛泛建议
+- 为复用而设计的流程
 
 ### `skills/`
 
-Use `skills/` for repeatable workflows that future agents should follow:
+放可复用的多步骤流程：
 
-- multi-step procedures
-- review checklists
-- operating playbooks
-- tasks where output shape should be standardized
+- 操作流程
+- review checklist
+- 运行手册
+- 输出结构需要标准化的任务
 
-Good fit:
+适合：
 
-- "Summarize context into reusable knowledge and recommend where it should live."
-- "Validate a skill folder and install it into Codex."
+- “把上下文总结为可复用知识并推荐落库位置”
+- “校验技能目录并安装到 Codex”
 
-Bad fit:
+不适合：
 
-- single standalone rules
-- facts without a procedure
+- 单条独立规则
+- 没有流程的事实信息
 
-## Shared Vs Role-Specific Path Examples
+## 共享与角色路径示例
 
-- Shared operating rule: `<root>/AGENTS.md`
-- Shared principle: `<root>/principles/<topic>.md`
-- Shared insight: `<root>/insights/<topic>.md`
-- Shared incident record: `<root>/experience/<topic>.md`
-- Shared workflow: `<root>/skills/<skill-name>/SKILL.md`
+- 共享入口规则：`<root>/AGENTS.md`
+- 共享原则：`<root>/principles/<topic>.md`
+- 共享洞察：`<root>/insights/<topic>.md`
+- 共享经验：`<root>/experience/<topic>.md`
+- 共享技能：`<root>/skills/<skill-name>/SKILL.md`
 
-- Role operating rule: `<root>/roles/<role>/AGENTS.md`
-- Role principle: `<root>/roles/<role>/principles/<topic>.md`
-- Role insight: `<root>/roles/<role>/insights/<topic>.md`
-- Role incident record: `<root>/roles/<role>/experience/<topic>.md`
-- Role workflow: `<root>/roles/<role>/skills/<skill-name>/SKILL.md`
+- 角色入口规则：`<root>/roles/<role>/AGENTS.md`
+- 角色原则：`<root>/roles/<role>/principles/<topic>.md`
+- 角色洞察：`<root>/roles/<role>/insights/<topic>.md`
+- 角色经验：`<root>/roles/<role>/experience/<topic>.md`
+- 角色技能：`<root>/roles/<role>/skills/<skill-name>/SKILL.md`
 
-## Home Mode Mapping
+## `home` 模式映射
 
-When the target root is `$HOME/my_agent_skills`, do not write shared knowledge directly under the container root when `base/` and `roles/` exist.
+当目标根目录是 `$HOME/my_agent_skills` 时，如果仓库已经有 `base/` 和 `roles/`，不要把共享知识直接写到容器根目录下。
 
-Use this mapping:
+应按以下映射：
 
-- Shared operating rule: `<root>/base/AGENTS.md`
-- Shared principle: `<root>/base/principles/<topic>.md`
-- Shared insight: `<root>/base/insights/<topic>.md`
-- Shared incident record: `<root>/base/experience/<topic>.md`
-- Shared workflow: `<root>/base/skills/<skill-name>/SKILL.md`
+- 共享入口规则：`<root>/base/AGENTS.md`
+- 共享原则：`<root>/base/principles/<topic>.md`
+- 共享洞察：`<root>/base/insights/<topic>.md`
+- 共享经验：`<root>/base/experience/<topic>.md`
+- 共享技能：`<root>/base/skills/<skill-name>/SKILL.md`
 
-- Role operating rule: `<root>/roles/<role>/AGENTS.md`
-- Role principle: `<root>/roles/<role>/principles/<topic>.md`
-- Role insight: `<root>/roles/<role>/insights/<topic>.md`
-- Role incident record: `<root>/roles/<role>/experience/<topic>.md`
-- Role workflow: `<root>/roles/<role>/skills/<skill-name>/SKILL.md`
+- 角色入口规则：`<root>/roles/<role>/AGENTS.md`
+- 角色原则：`<root>/roles/<role>/principles/<topic>.md`
+- 角色洞察：`<root>/roles/<role>/insights/<topic>.md`
+- 角色经验：`<root>/roles/<role>/experience/<topic>.md`
+- 角色技能：`<root>/roles/<role>/skills/<skill-name>/SKILL.md`
 
-For `home` mode, the proposal should inspect the existing role list under `<root>/roles/` and explicitly explain why an item goes to `base` or to a specific role.
+在 `home` 模式下，提案应主动查看 `<root>/roles/` 下已有角色，并明确说明为什么内容应放到 `base` 或某个角色目录。
 
-## Root Initialization
+## 根目录初始化
 
-If the target knowledge root is missing expected structure and the user has confirmed the write, initialize only what is needed:
+如果目标知识根目录缺少必要结构，并且用户已确认写入，只初始化真正需要的部分：
 
 - `<root>/AGENTS.md`
 - `<root>/principles/`
@@ -209,51 +212,51 @@ If the target knowledge root is missing expected structure and the user has conf
 - `<root>/experience/`
 - `<root>/skills/`
 
-Do not create role-specific directories unless approved content actually targets them.
+不要提前创建没有被内容命中的角色目录。
 
-When creating a new root-level `AGENTS.md`, seed it with a minimal index:
+如果要创建一个新的根级 `AGENTS.md`，用最小索引初始化：
 
 ```md
-# Knowledge Index
+# 知识索引
 
-## Directories
+## 目录
 
-- `principles/`: durable rules
-- `insights/`: recurring patterns and lessons
-- `experience/`: concrete incidents and decisions
-- `skills/`: reusable workflows
+- `principles/`: 稳定规则
+- `insights/`: 反复出现的模式和经验
+- `experience/`: 具体事件和决策
+- `skills/`: 可复用流程
 ```
 
-Keep the initial file minimal. The point is to make later writes coherent, not to invent a full framework.
+初始文件要尽量简洁，重点是保证后续写入有一致结构。
 
-## Drafting Guidance
+## 起草规则
 
-When you recommend a destination:
+当你推荐目标路径时：
 
-1. Give the narrowest path that matches the current repository layout.
-2. Prefer existing entry-point files when the rule is short and high frequency.
-3. If the best destination file does not exist yet, propose a file path rather than forcing the content into the wrong file.
-4. Explain why the destination matches better than the nearby alternatives.
+1. 给出符合当前仓库结构的最窄路径
+2. 高频短规则优先落到现有入口文件
+3. 如果最佳目标文件不存在，直接推荐新文件路径，而不是硬塞到错误文件里
+4. 解释为什么该目标比附近替代项更合适
 
-## Write Rules
+## 写入规则
 
-When applying approved drafts:
+执行已确认写入时：
 
-1. Read the destination file first if it exists.
-2. Append or merge surgically instead of replacing whole files.
-3. Reuse the file's local tone and heading style.
-4. If multiple approved items belong in one new file, consolidate them when they clearly share a topic.
-5. If a candidate would duplicate an existing rule, skip the write and report that it was already covered.
-6. All newly drafted or appended content should be written in Chinese unless the user explicitly asks for another language.
+1. 如果目标文件存在，先读一遍
+2. 尽量局部追加或合并，不整体覆盖
+3. 复用文件已有的局部语气和标题风格
+4. 多个候选项若明显同题，应合并写入一个文件
+5. 若候选内容会重复已有规则，则跳过写入并说明原因
+6. 默认所有新增或追加内容都应使用中文，除非用户明确要求其他语言
 
-## Eat Maintenance Rules
+## Eat 自维护规则
 
-Use these rules when `eat` is updating itself.
+当 `eat` 更新自己时：
 
-1. `/eat update` may rely only on the current conversation unless the user explicitly adds more material to the context.
-2. `/eat update all` may read current `eat` maintenance assets on disk in addition to the current conversation.
-3. Both modes must produce a proposal before modifying any `eat` file.
-4. Both modes require explicit user approval before changing `eat` source files.
-5. When `eat` updates itself, treat the source skill under `$HOME/my_agent_skills` as the source of truth. Update source files first, then sync the installed copy under `$HOME/.codex/skills/`.
-6. If approved, both modes should reinstall the updated skill into the user Codex skills directory after the source updates are complete.
-7. Keep maintenance changes evidence-based and minimal. Avoid unsupported rewrites.
+1. `/eat update` 只依赖当前会话，除非用户明确补充更多材料
+2. `/eat update all` 可以读取当前 `eat` 维护资产 + 当前会话
+3. 两种模式都必须先出提案，再改文件
+4. 两种模式都必须得到用户明确批准
+5. 源技能以 `$HOME/my_agent_skills` 下的版本为准，先改源，再同步安装副本
+6. 如果用户批准，两种模式都应在更新源文件后重新安装到 Codex 技能目录
+7. 维护改动应尽量小、证据充分，不做无根据重写

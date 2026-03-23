@@ -1,19 +1,27 @@
 ---
 name: eat
-description: Use when the user wants to extract reusable knowledge from the current context or from documents, repositories, images, PDFs, URLs, or other provided sources, asks what should be kept from a task, asks where new knowledge belongs, wants draft text for shared or role-specific AGENTS, principles, insights, experience, or skills files, or uses /eat to capture and apply approved knowledge into a target root.
+description: 当用户希望从当前上下文、文档、仓库、图片、PDF、URL 或其他来源中提取可复用知识，判断知识该放在哪里，起草 AGENTS、principles、insights、experience、skills 文档，或使用 /eat、/eat update、/eat update all 维护知识时使用。
 ---
 
 # Eat
 
-## Overview
+## 概述
 
-Use this skill to eat the current context and turn it into reusable knowledge. The job is not to preserve everything. The job is to keep what is likely to matter again, place it in the right layer, draft markdown the user can reuse immediately, and, after explicit confirmation, write the approved content into a target knowledge-root directory.
+这个技能用于“吃掉”当前上下文，把真正值得长期复用的内容沉淀成知识。
 
-Read `references/knowledge-placement.md` before deciding where a knowledge item belongs.
+目标不是把所有内容都保存下来，而是：
 
-## Invocation
+- 识别哪些内容值得保留
+- 判断它应该放在共享层还是角色层
+- 选择合适的知识类型
+- 产出可以直接复用的 Markdown 草稿
+- 在获得用户明确确认后，再把内容写入目标知识库
 
-Support these shorthand forms:
+决定落库位置前，先读取 `references/knowledge-placement.md`。
+
+## 调用方式
+
+支持以下简写：
 
 - `/eat`
 - `/eat project`
@@ -21,303 +29,210 @@ Support these shorthand forms:
 - `/eat update`
 - `/eat update all`
 
-Interpret them like this:
+解释规则：
 
-- `/eat` means the target knowledge root is the current project root.
-- `/eat project` means the target knowledge root is the current working project root.
-- `/eat home` means the target knowledge root is `$HOME/my_agent_skills`.
-- In `home` mode, `$HOME/my_agent_skills` is a container root, not the final write layer:
-  - shared knowledge should normally go under `base/`
-  - role-specific knowledge should go under `roles/<role>/`
-- `eat` does not accept arbitrary path-like target arguments. Only `project` and `home` are valid target aliases.
+- `/eat` 等同于 `/eat project`
+- `/eat project`：目标知识根目录为当前项目根目录
+- `/eat home`：目标知识根目录为 `$HOME/my_agent_skills`
+- `/eat update`：只基于当前会话，反思 `eat` 在这次对话中的问题
+- `/eat update all`：基于当前会话 + 当前磁盘上的 `eat` 维护资产一起反思
 
-Examples:
+`project` 和 `home` 是保留别名，不接受任意路径参数。
 
-- `/eat` -> current project root
-- `/eat project` -> current project root
-- `/eat home` -> `$HOME/my_agent_skills`
+## 核心规则
 
-Interpret the maintenance forms like this:
+### 1. 第一次回复只给方案，不直接写文件
 
-- `/eat update` means reflect only on the current conversation and the most recent `eat` correction discussed in this context.
-- `/eat update all` means review the current conversation plus the existing `eat` maintenance assets on disk.
+无论是普通沉淀还是维护 `eat` 自身：
 
-The target root is a knowledge-root directory. It should contain or be allowed to create:
+- 第一次回复只给分析和提案
+- 不直接修改任何文件
+- 只有在用户明确确认后，才执行写入
 
-- `AGENTS.md`
-- `principles/`
-- `insights/`
-- `experience/`
-- `skills/`
+### 2. 优先选择最合适的来源
 
-Do not write anything during the first response. First produce the proposal, then wait for one explicit confirmation covering all retained items.
-For `/eat update` and `/eat update all`, this same confirmation rule applies before modifying any `eat` files or reinstalling the skill.
+普通沉淀模式按以下顺序选择来源：
 
-## Source Selection
+1. 用户在当前消息里明确指定的来源
+2. 最近一组附件
+3. 当前会话上下文
 
-For normal ingestion modes, choose the source set in this order:
+混合来源时：
 
-1. An explicit source named by the user in the current message.
-2. The most recent attachment group in the current conversation.
-3. The current conversation context.
+- 尽可能处理所有可读来源
+- 不可读或不支持的来源要标记为跳过，并给出简短原因
+- 不因为其中一个来源失败就放弃整组来源
 
-Treat the most recent attachment group as a set. Summarize each source separately first, then produce one merged conclusion across the processed group.
+### 3. 不是所有内容都该保存
 
-Supported source types include:
+以下情况通常不应沉淀：
 
-- single files
-- directories and code repositories
-- attached images
-- local image paths
-- PDFs and attached documents
-- URLs
-- pasted text in the current conversation
+- 只适用于一次临时情境
+- 很快会失效
+- 只是当前任务的重复表述
+- 缺少足够上下文，后续无法安全复用
+- 已经被现有稳定规则覆盖，没有新增价值
 
-When sources are mixed:
+边界不清时，要明确说明风险。
 
-- process every source type you can read reliably
-- mark unreadable or unsupported sources as skipped with a short reason
-- do not fail the entire run only because one source in the group is unusable
+### 4. 明确区分共享知识和角色知识
 
-## What Counts As Input
+先判断内容属于：
 
-Look at the selected source set plus any current-conversation context that explains what was learned:
+- 共享知识：跨角色通用
+- 角色知识：强依赖某个角色的职责、工具、解释口径或输出标准
 
-- user requirements and corrections
-- troubleshooting steps and workarounds
-- repeated constraints or operating rules
-- decisions about what belongs in shared vs role-specific knowledge
-- concrete incidents, postmortems, or reversals
-- patterns that appeared more than once during the task
-- extracted content from documents, repositories, images, PDFs, URLs, or pasted text
+如果是在 `home` 模式下：
 
-## Filter Before You Keep
+- 共享知识默认写入 `base/`
+- 角色知识默认写入 `roles/<role>/`
 
-Reject or mark `Do Not Store` when the item is:
+## 知识分类流程
 
-- too specific to one temporary situation
-- likely to expire soon
-- only a restatement of the current task
-- missing enough context to be reused safely
-- already represented by an existing stable rule with no meaningful refinement
+对每个候选知识项，依次判断：
 
-If an item is borderline, say so and explain the risk of storing it.
+1. 它属于共享还是角色私有
+2. 它更适合写成：
+   - `AGENTS.md` 中的入口规则
+   - `principles/` 中的稳定原则
+   - `insights/` 中的规律性认知
+   - `experience/` 中的具体事件记录
+   - `skills/` 中的可复用流程
+3. 给出精确推荐路径
+4. 输出可直接粘贴的 Markdown 草稿
 
-When deciding what to keep, explicitly check for cross-project, high-frequency operating rules that reduce interruption risk, such as:
+## 正常模式的输出格式
 
-- long-running commands should use `tmux`
-- background work should use a persistent session
-- benchmark, batch processing, downloads, and long tests should default to a protected session
+先描述来源集合：
 
-If such a rule appears in the current context, prefer keeping it as an `AGENTS.md` candidate instead of dropping it as "too operational".
-
-## Maintenance Modes
-
-Use these modes when the user wants `eat` to improve itself.
-
-### `/eat update`
-
-Use only the current conversation as evidence. Do not proactively load existing `eat` maintenance assets unless the user explicitly includes them in the current context.
-
-The goal is to capture:
-
-- what `eat` got wrong in this conversation
-- the corrected rule or behavior
-- the smallest set of `eat` files that should change
-
-### `/eat update all`
-
-Use the current conversation plus the current `eat` maintenance assets on disk, such as:
-
-- `base/skills/eat/SKILL.md`
-- `base/skills/eat/references/knowledge-placement.md`
-- `base/skills/eat/references/`
-- `base/skills/eat/evals/`
-- other directly related `eat` files
-
-Make only evidence-backed, minimal changes. Do not rewrite large sections without a clear reason supported by the current conversation or existing maintenance assets.
-
-For both maintenance modes:
-
-- always produce a proposal first
-- never modify `eat` before explicit user confirmation
-- if approved, update the relevant source `eat` files under `$HOME/my_agent_skills` first, then reinstall the skill into the user Codex directory
-
-## Classification Flow
-
-For each candidate knowledge item:
-
-1. Decide whether it is shared or role-specific.
-2. Decide whether it is best represented as:
-   - an entry-point operating rule in `AGENTS.md`
-   - a durable rule in `principles/`
-   - a repeated pattern in `insights/`
-   - a concrete incident in `experience/`
-   - a reusable workflow in `skills/`
-3. Recommend the exact destination path.
-4. Draft markdown the user can paste there directly.
-
-When a workflow deserves a skill, say whether it should live under `<root>/skills/` or `<root>/roles/<role>/skills/`.
-
-Resolve each recommended path under the chosen target root, not under the repository that contains this skill unless the user selected that repository as the target root.
-`project` and `home` are reserved target aliases. Do not reinterpret them as ordinary folder names or arbitrary paths.
-For `home` mode, do not recommend root-level `principles/`, `insights/`, `experience/`, or `skills/` directly under `$HOME/my_agent_skills` when `base/` and `roles/` are present.
-
-## Placement Rules
-
-Use these rules consistently:
-
-- Put short, high-frequency operating guidance in `<root>/AGENTS.md` or `<root>/roles/<role>/AGENTS.md`.
-- Put stable rules that should survive many tasks in `<root>/principles/`.
-- Put generalized patterns learned from repeated work in `<root>/insights/`.
-- Put concrete incidents, exceptions, and decision records in `<root>/experience/`.
-- Put repeatable multi-step workflows in `<root>/skills/`.
-
-## Proposal Output Format
-
-For normal ingestion modes, first describe the processed source set:
-
+```md
 ## Source Set
 - Target Root: `<exact path>`
 - Source Mode: <explicit source | recent attachment group | current conversation>
 - Processed Sources:
   - `<source>`: <processed | skipped: reason>
+```
 
-When the target is `home`, also include:
+如果目标是 `home`，还要额外说明：
 
+```md
 - Existing Shared Layer: `<root>/base`
 - Existing Roles:
   - `<role>`
 - Placement Default:
   - `shared -> base`
   - `role-specific -> roles/<role>`
+```
 
-Then, for each processed source, use this exact structure:
+然后对每个来源输出：
 
-## Source Summary: <source label>
+```md
+## 来源总结：<source label>
 - Source Type: <file | repo | image | pdf | document | url | pasted text | conversation>
-- Key Takeaway: <1-3 sentences in Chinese>
+- Key Takeaway: <1-3 句中文总结>
+```
 
-For each retained item under that source, use this exact structure:
+对每个保留项输出：
 
-### Candidate: <short statement>
+```md
+### 候选知识：<short statement>
 - Scope: <shared | role-specific:<role>>
 - Knowledge Type: <AGENTS rule | principle | insight | experience | skill>
 - Recommended Path: `<exact repository path>`
-- Why Here: <1-3 sentences>
+- Why Here: <1-3 句说明>
 - Draft:
 
 ```md
 <paste-ready markdown>
 ```
+```
 
-If the item should not be stored, use this structure instead:
+对不应保存的项输出：
 
-### Candidate: <short statement>
+```md
+### 候选知识：<short statement>
 - Scope: <shared | role-specific:<role> | unclear>
 - Decision: Do Not Store
-- Reason: <why it is too narrow, unstable, redundant, or incomplete>
+- Reason: <原因>
+```
 
-After all candidates, add this summary:
+最后补：
 
-## Merged Conclusion
-- Summary: <cross-source conclusion in Chinese>
+```md
+## 合并结论
+- Summary: <中文总结>
 - Cross-Source Notes:
   - <note>
 
-## Apply Summary
+## 应用摘要
 - Target Root: `<exact path>`
 - Files To Create:
   - `<path>`
-- Files To Update:
+- 待更新文件:
   - `<path>`
 - Confirmation Required: `No files will be changed until the user explicitly confirms the full write.`
+```
 
-For `home` mode, all recommended paths must land in either:
-- `<root>/base/...`
-- `<root>/roles/<role>/...`
+如果没有任何内容值得保存，就直接说明，不要求确认。
 
-If nothing should be stored, say so directly and do not ask for confirmation.
+## 维护模式
 
-For `/eat update` and `/eat update all`, use this structure instead:
+### `/eat update`
 
-## Failure Summary
-- Issue: <what `eat` got wrong>
+只使用当前会话作为证据来源，不主动读取现有 `eat` 维护资产，除非用户明确要求。
+
+### `/eat update all`
+
+使用当前会话 + 当前磁盘上的 `eat` 维护资产，例如：
+
+- `base/skills/eat/SKILL.md`
+- `base/skills/eat/references/knowledge-placement.md`
+- 其他直接相关的 `eat` 文件
+
+两种模式都必须：
+
+- 先给提案
+- 不提前改文件
+- 只有在用户明确确认后才修改
+- 若修改通过，应先更新 `$HOME/my_agent_skills` 下的源技能，再同步已安装副本
+
+维护模式下使用以下格式：
+
+```md
+## 失败摘要
+- Issue: <eat 做错了什么>
 - Evidence Scope: <current context only | current context + existing eat assets>
 
-## Root Cause
-- <1-3 sentences>
+## 根因
+- <1-3 句说明>
 
-## Rule Changes
-- <proposed rule change>
+## 规则变更
+- <拟议规则变化>
 
-## Files To Update
+## 待更新文件
 - `<path>`
 
-For maintenance proposals, list source skill files first. Do not list the installed copy under `$HOME/.codex/skills/eat` as the primary maintenance target.
-
-## Patch Draft
-
-```md
-<succinct patch summary or paste-ready replacement text in Chinese>
+## 补丁草稿
 ```
 
-## Reinstall Plan
-- Source Skill Path: `$HOME/my_agent_skills/base/skills/eat`
-- Installed Skill Path: `$HOME/.codex/skills/eat`
-- Confirmation Required: `No eat files or installed copies will be changed until the user explicitly confirms the full update.`
+## 放置规则
 
-## Apply Phase
+- 高频、短小、开工即需的规则：放 `AGENTS.md`
+- 稳定约束：放 `principles/`
+- 可泛化模式：放 `insights/`
+- 具体事件和复盘：放 `experience/`
+- 多步骤可复用流程：放 `skills/`
 
-Only enter apply mode after a single explicit user confirmation for the full proposal.
+## 写入规则
 
-In apply mode:
+在用户确认后执行写入时：
 
-1. Reuse the approved target root from the proposal unless the user changes it explicitly.
-2. Inspect each destination file before editing it.
-3. Create the minimal root structure if needed:
-   - `<root>/AGENTS.md`
-   - `<root>/principles/`
-   - `<root>/insights/`
-   - `<root>/experience/`
-   - `<root>/skills/`
-4. Create role-specific directories only when an approved item requires them.
-5. Avoid duplicate insertions by searching for equivalent content before writing.
-6. Preserve existing structure and tone instead of replacing full files.
-7. Write all newly drafted or appended content in Chinese unless the user explicitly asks for another language.
-8. If this is `/eat update` or `/eat update all`, first update the source skill files under `$HOME/my_agent_skills/base/skills/eat`, then reinstall the updated skill into `$HOME/.codex/skills/eat` after the source changes are complete.
-9. Report the files created or updated after writing.
+1. 如果目标文件已存在，先读取
+2. 尽量局部追加或合并，不整文件重写
+3. 复用目标文件的局部语气和标题风格
+4. 主题明显一致时，把多个候选项合并到一个新文件中
+5. 若发现候选内容与现有规则重复，应跳过写入并说明已覆盖
 
-## Drafting Rules
+## 自维护边界
 
-- Write the draft in the tone already used by the target file.
-- Always write the draft itself in Chinese.
-- Prefer small, paste-ready text over long essays.
-- If the destination file does not exist yet, recommend the most likely path and state that it is a proposed file.
-- Do not invent incidents or repeated patterns that are not supported by the current context.
-- Before confirmation, do not modify files.
-- After confirmation, write only the approved items.
-- When creating or updating files during apply mode, write the new content in Chinese.
-- For maintenance modes, do not modify `eat` itself or reinstall it until the user has explicitly approved the proposal.
-- For `eat home`, explicitly check whether the context contains any shared high-frequency operating rules that belong in root-level `AGENTS.md`, especially rules about long-running commands, persistent sessions, and interruption protection.
-
-## Example
-
-### Candidate: Network issues should use the proxy on port 7741
-- Scope: shared
-- Knowledge Type: AGENTS rule
-- Recommended Path: `/path/to/knowledge-root/AGENTS.md`
-- Why Here: This is a short operating rule that may help any agent recover from a common environment problem quickly.
-- Draft:
-
-```md
-- If network access fails, retry through the proxy on port `7741` before assuming the remote service is unavailable.
-```
-
-## Apply Summary
-- Target Root: `/path/to/knowledge-root`
-- Files To Create:
-  - `/path/to/knowledge-root/AGENTS.md`
-- Files To Update:
-  - None
-- Confirmation Required: `No files will be changed until the user explicitly confirms the full write.`
+`eat` 更新自己时，以 `$HOME/my_agent_skills` 下的源技能为准，不要把已安装副本当成唯一真相。

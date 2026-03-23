@@ -1,31 +1,27 @@
-# Base Knowledge Index
+# base — 通用知识
 
-This directory contains knowledge shared across all agents.
+这里存放所有角色共享的知识。角色私有知识见 `roles/<role>/`。
 
-## Directories
+## 目录说明
 
-- `experience/`: shared postmortems and concrete lessons
-- `principles/`: stable cross-role rules
-- `skills/`: reusable operational workflows
-- `insights/`: generalized observations distilled from repeated work
+| 目录/文件 | 内容 |
+|---|---|
+| `experience/` | 不绑定具体角色的经验素材和复盘 |
+| `principles/` | 通用原则和稳定约束 |
+| `skills/` | 通用技能，每个技能目录主入口为 `SKILL.md` |
+| `insights/` | 跨角色可复用的规律性认知 |
+| `knowledge-sedimentation.md` | 经验沉淀规范 |
 
-## Available Shared Skills
+## 当前共享技能
 
-- [skill-creator](skills/skill-creator/SKILL.md)
-  Use when creating a new skill or updating an existing one.
-- [skill-creator-codex](skills/skill-creator-codex/SKILL.md)
-  Use when creating or adapting skills for Codex and installing them locally.
-- [eat](skills/eat/SKILL.md)
-  Use when extracting reusable knowledge from the current context, deciding where shared or role-specific guidance should live, and optionally writing approved knowledge into a target root.
+- `skills/eat/`：把对话、文档、仓库、图片、PDF 等来源转成可复用知识，并给出落库位置建议
+- `skills/skill-creator/`：创建、迭代、评测和优化通用技能
+- `skills/skill-creator-codex/`：为 Codex 创建、迁移、校验和安装技能
 
-## Usage Rules
+各子目录的详细索引见对应的 `AGENTS.md` 或 `SKILL.md`。目录级入口统一用 `AGENTS.md`，技能主入口统一用 `SKILL.md`。
 
-1. Prefer `base/` knowledge unless the task clearly belongs to a specific role.
-2. Keep `SKILL.md` concise; move long material into `references/` or `scripts/`.
-3. Record one-off incidents in `experience/`, not in skills.
+## 修改规范
 
-## Long-Running Tasks
-
-1. Run long-running commands inside `tmux` to avoid losing work when the session disconnects.
-2. Before starting a long benchmark, download, batch job, or test run, decide whether it needs a dedicated `tmux` session.
-3. Default benchmark, batch processing, long downloads, and long tests to `tmux`.
+- 对 `base/` 的修改需要通过 review
+- 新增文档应遵循现有格式
+- 从角色私有知识提升到 `base/` 时，应去除角色特定部分，保留可跨角色复用的内容

@@ -1,6 +1,6 @@
-# Open Questions
+# 开放问题
 
-- Which benchmark tools should be the default choices for databases, caches, brokers, and cluster-level tests?
-- What minimum environment metadata is required before a result is considered trustworthy?
-- Which parts of the current `benchmark-report-packaging` workflow should become this role's mandatory report standard, and which metrics or charts should remain optional guidance?
-- How should runs on different hardware, cloud instances, or noisy shared environments be compared?
+- 数据库、缓存、消息代理和集群级测试的默认 benchmark 工具应该分别选什么？
+- 结果要被视为可信，最少需要哪些环境元数据？
+- 当前 `benchmark-report-packaging` 流程中，哪些部分应该升级为这个角色的强制报告标准，哪些图表或指标仍应保留为可选建议？
+- 在不同硬件、不同云实例或共享环境噪声较大的前提下，应如何比较多次运行结果？
