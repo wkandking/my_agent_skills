@@ -14,13 +14,15 @@ Knowledge should be classified before being added:
 
 Loading guidance:
 
-1. Read [base/AGENTS.md](/Users/wangkang/my_agent_skills/base/AGENTS.md) for shared knowledge.
+1. Read [base/AGENTS.md](base/AGENTS.md) for shared knowledge.
 2. If working in a specific role, also read `roles/<role>/AGENTS.md`.
 3. Load only the specific skill or reference material needed for the task.
 
 Current shared skill inventory:
 
-- [skill-creator](/Users/wangkang/my_agent_skills/base/skills/skill-creator/SKILL.md)
+- [skill-creator](base/skills/skill-creator/SKILL.md)
+- [skill-creator-codex](base/skills/skill-creator-codex/SKILL.md)
+- [eat](base/skills/eat/SKILL.md)
 
 ## Git 提交规则
 

@@ -18,6 +18,8 @@ Use this skill to:
 
 Read [references/codex-usage.md](references/codex-usage.md) when you need
 installation or verification details.
+Read [scripts/README.md](scripts/README.md) when you need to distinguish
+Codex-native helper scripts from retained Claude-only reference automation.
 
 ## When to Use
 
@@ -123,6 +125,9 @@ are not part of the Codex-native path:
 
 They depend on the `claude` CLI and will exit with a clear message when that
 tool is unavailable.
+
+Keep them separate in your mental model from the Codex-native helpers such as
+`quick_validate.py` and `install_to_codex.py`.
 
 ## Quick Reference
 

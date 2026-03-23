@@ -26,6 +26,7 @@ Current shared skills:
 
 - `base/skills/skill-creator`
 - `base/skills/skill-creator-codex`
+- `base/skills/eat`
 
 Knowledge types:
 

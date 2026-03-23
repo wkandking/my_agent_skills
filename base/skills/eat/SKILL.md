@@ -16,27 +16,26 @@ Read `references/knowledge-placement.md` before deciding where a knowledge item 
 Support these shorthand forms:
 
 - `/eat`
-- `/eat <folder>`
-- `/eat <target> <source>`
+- `/eat project`
+- `/eat home`
 - `/eat update`
 - `/eat update all`
 
 Interpret them like this:
 
 - `/eat` means the target knowledge root is the current project root.
-- `/eat <folder>` means:
-  - if `<folder>` is exactly `home`, use `$HOME/my_agent_skills`
-  - if `<folder>` is an absolute path, use it directly
-  - if `<folder>` is only a folder name or a relative path, resolve it under `$HOME`
-- `/eat <target> <source>` means use `<target>` as the knowledge root and `<source>` as an explicit source path, URL, or source descriptor.
-- If the user gives a different explicit target root in the message, use that explicit root.
+- `/eat project` means the target knowledge root is the current working project root.
+- `/eat home` means the target knowledge root is `$HOME/my_agent_skills`.
+- In `home` mode, `$HOME/my_agent_skills` is a container root, not the final write layer:
+  - shared knowledge should normally go under `base/`
+  - role-specific knowledge should go under `roles/<role>/`
+- `eat` does not accept arbitrary path-like target arguments. Only `project` and `home` are valid target aliases.
 
 Examples:
 
-- `/eat my_agent_skills` -> `$HOME/my_agent_skills`
+- `/eat` -> current project root
+- `/eat project` -> current project root
 - `/eat home` -> `$HOME/my_agent_skills`
-- `/eat knowledge/base` -> `$HOME/knowledge/base`
-- `/eat /tmp/kb` -> `/tmp/kb`
 
 Interpret the maintenance forms like this:
 
@@ -104,6 +103,14 @@ Reject or mark `Do Not Store` when the item is:
 
 If an item is borderline, say so and explain the risk of storing it.
 
+When deciding what to keep, explicitly check for cross-project, high-frequency operating rules that reduce interruption risk, such as:
+
+- long-running commands should use `tmux`
+- background work should use a persistent session
+- benchmark, batch processing, downloads, and long tests should default to a protected session
+
+If such a rule appears in the current context, prefer keeping it as an `AGENTS.md` candidate instead of dropping it as "too operational".
+
 ## Maintenance Modes
 
 Use these modes when the user wants `eat` to improve itself.
@@ -153,7 +160,8 @@ For each candidate knowledge item:
 When a workflow deserves a skill, say whether it should live under `<root>/skills/` or `<root>/roles/<role>/skills/`.
 
 Resolve each recommended path under the chosen target root, not under the repository that contains this skill unless the user selected that repository as the target root.
-Never resolve `/eat <folder>` relative to the current project root. The current project root is only the default when the user omits the folder argument entirely.
+`project` and `home` are reserved target aliases. Do not reinterpret them as ordinary folder names or arbitrary paths.
+For `home` mode, do not recommend root-level `principles/`, `insights/`, `experience/`, or `skills/` directly under `$HOME/my_agent_skills` when `base/` and `roles/` are present.
 
 ## Placement Rules
 
@@ -174,6 +182,15 @@ For normal ingestion modes, first describe the processed source set:
 - Source Mode: <explicit source | recent attachment group | current conversation>
 - Processed Sources:
   - `<source>`: <processed | skipped: reason>
+
+When the target is `home`, also include:
+
+- Existing Shared Layer: `<root>/base`
+- Existing Roles:
+  - `<role>`
+- Placement Default:
+  - `shared -> base`
+  - `role-specific -> roles/<role>`
 
 Then, for each processed source, use this exact structure:
 
@@ -216,6 +233,10 @@ After all candidates, add this summary:
   - `<path>`
 - Confirmation Required: `No files will be changed until the user explicitly confirms the full write.`
 
+For `home` mode, all recommended paths must land in either:
+- `<root>/base/...`
+- `<root>/roles/<role>/...`
+
 If nothing should be stored, say so directly and do not ask for confirmation.
 
 For `/eat update` and `/eat update all`, use this structure instead:
@@ -233,7 +254,7 @@ For `/eat update` and `/eat update all`, use this structure instead:
 ## Files To Update
 - `<path>`
 
-For maintenance proposals, list source skill files first. Do not list the installed copy under `/Users/wangkang/.codex/skills/eat` as the primary maintenance target.
+For maintenance proposals, list source skill files first. Do not list the installed copy under `$HOME/.codex/skills/eat` as the primary maintenance target.
 
 ## Patch Draft
 
@@ -242,8 +263,8 @@ For maintenance proposals, list source skill files first. Do not list the instal
 ```
 
 ## Reinstall Plan
-- Source Skill Path: `/Users/wangkang/my_agent_skills/base/skills/eat`
-- Installed Skill Path: `/Users/wangkang/.codex/skills/eat`
+- Source Skill Path: `$HOME/my_agent_skills/base/skills/eat`
+- Installed Skill Path: `$HOME/.codex/skills/eat`
 - Confirmation Required: `No eat files or installed copies will be changed until the user explicitly confirms the full update.`
 
 ## Apply Phase
@@ -264,7 +285,7 @@ In apply mode:
 5. Avoid duplicate insertions by searching for equivalent content before writing.
 6. Preserve existing structure and tone instead of replacing full files.
 7. Write all newly drafted or appended content in Chinese unless the user explicitly asks for another language.
-8. If this is `/eat update` or `/eat update all`, first update the source skill files under `/Users/wangkang/my_agent_skills/base/skills/eat`, then reinstall the updated skill into `/Users/wangkang/.codex/skills/eat` after the source changes are complete.
+8. If this is `/eat update` or `/eat update all`, first update the source skill files under `$HOME/my_agent_skills/base/skills/eat`, then reinstall the updated skill into `$HOME/.codex/skills/eat` after the source changes are complete.
 9. Report the files created or updated after writing.
 
 ## Drafting Rules
@@ -278,6 +299,7 @@ In apply mode:
 - After confirmation, write only the approved items.
 - When creating or updating files during apply mode, write the new content in Chinese.
 - For maintenance modes, do not modify `eat` itself or reinstall it until the user has explicitly approved the proposal.
+- For `eat home`, explicitly check whether the context contains any shared high-frequency operating rules that belong in root-level `AGENTS.md`, especially rules about long-running commands, persistent sessions, and interruption protection.
 
 ## Example
 

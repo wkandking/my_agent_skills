@@ -9,17 +9,19 @@ All destination paths should be resolved under the chosen knowledge-root directo
 Resolve the target root like this:
 
 1. If the user uses `/eat` with no argument, use the current project root.
-2. If the user uses `/eat home`, resolve it to `$HOME/my_agent_skills`.
-3. If the user uses `/eat <folder>` and `<folder>` is an absolute path, use it directly.
-4. If the user uses `/eat <folder>` and `<folder>` is only a folder name or a relative path, resolve it under `$HOME`.
-5. Never resolve `/eat <folder>` relative to the current project root.
+2. If the user uses `/eat project`, use the current project root.
+3. If the user uses `/eat home`, resolve it to `$HOME/my_agent_skills`.
+4. In `home` mode, `$HOME/my_agent_skills` is a container root:
+   - shared knowledge should normally go under `base/`
+   - role-specific knowledge should go under `roles/<role>/`
+5. `eat` does not accept arbitrary path arguments or ordinary folder names as target roots.
+6. Only `project` and `home` are valid explicit target aliases.
 
 Examples:
 
-- `/eat my_agent_skills` -> `$HOME/my_agent_skills`
+- `/eat` -> current project root
+- `/eat project` -> current project root
 - `/eat home` -> `$HOME/my_agent_skills`
-- `/eat knowledge/base` -> `$HOME/knowledge/base`
-- `/eat /tmp/kb` -> `/tmp/kb`
 
 ## Source Ingestion Rules
 
@@ -177,6 +179,26 @@ Bad fit:
 - Role incident record: `<root>/roles/<role>/experience/<topic>.md`
 - Role workflow: `<root>/roles/<role>/skills/<skill-name>/SKILL.md`
 
+## Home Mode Mapping
+
+When the target root is `$HOME/my_agent_skills`, do not write shared knowledge directly under the container root when `base/` and `roles/` exist.
+
+Use this mapping:
+
+- Shared operating rule: `<root>/base/AGENTS.md`
+- Shared principle: `<root>/base/principles/<topic>.md`
+- Shared insight: `<root>/base/insights/<topic>.md`
+- Shared incident record: `<root>/base/experience/<topic>.md`
+- Shared workflow: `<root>/base/skills/<skill-name>/SKILL.md`
+
+- Role operating rule: `<root>/roles/<role>/AGENTS.md`
+- Role principle: `<root>/roles/<role>/principles/<topic>.md`
+- Role insight: `<root>/roles/<role>/insights/<topic>.md`
+- Role incident record: `<root>/roles/<role>/experience/<topic>.md`
+- Role workflow: `<root>/roles/<role>/skills/<skill-name>/SKILL.md`
+
+For `home` mode, the proposal should inspect the existing role list under `<root>/roles/` and explicitly explain why an item goes to `base` or to a specific role.
+
 ## Root Initialization
 
 If the target knowledge root is missing expected structure and the user has confirmed the write, initialize only what is needed:
@@ -232,6 +254,6 @@ Use these rules when `eat` is updating itself.
 2. `/eat update all` may read current `eat` maintenance assets on disk in addition to the current conversation.
 3. Both modes must produce a proposal before modifying any `eat` file.
 4. Both modes require explicit user approval before changing `eat` source files.
-5. When `eat` updates itself, treat the source skill under `$HOME/my_agent_skills` as the source of truth. Update source files first, then sync the installed copy under `/Users/wangkang/.codex/skills/`.
+5. When `eat` updates itself, treat the source skill under `$HOME/my_agent_skills` as the source of truth. Update source files first, then sync the installed copy under `$HOME/.codex/skills/`.
 6. If approved, both modes should reinstall the updated skill into the user Codex skills directory after the source updates are complete.
 7. Keep maintenance changes evidence-based and minimal. Avoid unsupported rewrites.

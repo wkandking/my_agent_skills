@@ -2,5 +2,5 @@
 
 - Which benchmark tools should be the default choices for databases, caches, brokers, and cluster-level tests?
 - What minimum environment metadata is required before a result is considered trustworthy?
-- What report template should be standard for this role, and which metrics or charts are mandatory?
+- Which parts of the current `benchmark-report-packaging` workflow should become this role's mandatory report standard, and which metrics or charts should remain optional guidance?
 - How should runs on different hardware, cloud instances, or noisy shared environments be compared?

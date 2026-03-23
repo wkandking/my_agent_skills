@@ -1,5 +1,8 @@
 # Role Template
 
+This directory is a scaffold only. Do not load `_template` as a real role.
+Copy it to `roles/<role-name>/` and customize it before use.
+
 Replace `<role-name>` with the actual role and customize this file.
 
 ## Purpose
