@@ -1,39 +1,39 @@
 ---
 name: benchmark-report-packaging
-description: 用于把基准测试结果、图表和单点案例整理成可交付的分析报告。
+description: Use to turn benchmark results, charts, and fixed-point cases into a deliverable analysis report.
 ---
 
 # Benchmark Report Packaging
 
-## 目标
+## Goal
 
-把原始 benchmark 结果整理成“数据先行、图表支撑、结论有解释”的最终报告，而不是只堆图或只报峰值。
+Turn raw benchmark results into a final report where data leads, charts support the story, and conclusions are explained, instead of merely stacking figures or reporting peak values.
 
-## 工作流
+## Workflow
 
-1. 先按语义变量和部署变量拆分场景，再写结论。
-2. 每个小节都优先放数据表，再放图。
-3. 趋势图优先用折线图，汇总图优先用柱图；除非密度本身就是重点，否则不要默认用热力图。
-4. 每张图下面都补一段解释，至少回答三件事：
-   - 这张图在回答什么问题
-   - 主要趋势是什么
-   - 这个趋势为什么重要
-5. 每个小节末尾再写一段小结，收拢该节的主线。
-6. 如果存在固定点位案例，把它保留在正文里，并把核心结论前置到最终判断开头。
-7. 如果要对齐某份参考报告，不要只改标题：
-   - 要一起对齐标题风格
-   - 章节顺序
-   - 摘要写法
-   - 图表摆放方式
-   - 解释密度
+1. Split scenarios by semantic variables and deployment variables before writing conclusions.
+2. In each section, present data tables before charts.
+3. Prefer line charts for trends and bar charts for summaries. Do not default to heatmaps unless density itself is the point.
+4. Under every chart, add a short explanation that answers at least three questions:
+   - What question is this chart answering?
+   - What is the main trend?
+   - Why does that trend matter?
+5. End each section with a short summary that pulls the section's main thread together.
+6. If there are fixed-point case studies, keep them in the main body and surface the key takeaway at the start of the final judgment.
+7. If the report needs to align with a reference report, do not change only the headings:
+   - align the heading style as well
+   - align the section order
+   - align the summary style
+   - align the chart placement
+   - align the explanation density
 
-## 推荐章节顺序
+## Recommended Section Order
 
-1. 文档目标
-2. 场景与测试方法
-3. 结论摘要
-4. 性能结果
-5. perf 或资源侧补充
-6. 机制解释
-7. 最终判断
-8. 附录或原始文件
+1. Document objective
+2. Scenarios and test method
+3. Executive summary
+4. Performance results
+5. `perf` or resource-side supplements
+6. Mechanism explanation
+7. Final judgment
+8. Appendix or raw files

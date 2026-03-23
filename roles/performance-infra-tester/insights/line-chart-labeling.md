@@ -1,7 +1,7 @@
-# 密集折线图的标注方式
+# Labeling Dense Line Charts
 
-- 当 benchmark 折线图里有很多条彼此接近的曲线时，优先使用“线尾直接标注”，而不是把图例单独放在角落。
-- 标签颜色应与曲线颜色保持一致。
-- 图右侧要预留留白，避免线尾标签被裁切。
-- 线尾标签需要做基础上下避让，降低重叠风险。
-- 对柱图或系列较少的图，独立图例仍然可以保留。
+- When a benchmark line chart contains many closely spaced series, prefer direct end-of-line labels instead of putting the legend off in a corner.
+- Keep label colors aligned with the corresponding line colors.
+- Leave extra whitespace on the right side of the chart so end labels do not get clipped.
+- Apply basic vertical collision avoidance to end labels to reduce overlap.
+- For bar charts or charts with only a few series, a separate legend can still be appropriate.

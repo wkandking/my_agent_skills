@@ -1,6 +1,6 @@
-# 场景可比性规则
+# Scenario Comparability Rules
 
-- 不要把语义不同的基准场景压成一个“总冠军”结论。
-- 像 `no-distinct` 与 stepwise `DISTINCT` 这样的查询语义变化，应当被视为一级解释变量，而不是小变体。
-- 像 `numa0` 这样的部署变量，应当与数据库引擎变量分开分析。
-- 写结论时，先给每个场景自己的判断，再总结跨场景的共同模式。
+- Do not collapse benchmark scenarios with different semantics into a single "overall winner" conclusion.
+- Query semantic changes such as `no-distinct` versus stepwise `DISTINCT` should be treated as primary explanatory variables, not minor variants.
+- Deployment variables such as `numa0` should be analyzed separately from database engine variables.
+- When writing conclusions, give each scenario its own judgment first, then summarize the shared patterns across scenarios.

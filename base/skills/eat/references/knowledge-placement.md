@@ -214,14 +214,14 @@ Do not create role-specific directories unless approved content actually targets
 When creating a new root-level `AGENTS.md`, seed it with a minimal index:
 
 ```md
-# 知识索引
+# Knowledge Index
 
-## 目录
+## Directories
 
-- `principles/`: 持久规则
-- `insights/`: 重复出现的模式与启发
-- `experience/`: 具体事件与决策
-- `skills/`: 可复用工作流
+- `principles/`: durable rules
+- `insights/`: recurring patterns and lessons
+- `experience/`: concrete incidents and decisions
+- `skills/`: reusable workflows
 ```
 
 Keep the initial file minimal. The point is to make later writes coherent, not to invent a full framework.

@@ -24,25 +24,25 @@ Current shared skill inventory:
 - [skill-creator-codex](base/skills/skill-creator-codex/SKILL.md)
 - [eat](base/skills/eat/SKILL.md)
 
-## Git 提交规则
+## Git Commit Rules
 
-- 进行 `git commit` 时，必须编写清晰的 `commit message`。
-- `commit message` 应使用简洁的一行摘要，直接说明本次改动结果，不要写成模糊描述。
-- 推荐格式：`<type>: <what changed>`。
+- Every `git commit` must use a clear `commit message`.
+- The `commit message` should be a concise one-line summary that states the result of the change directly, not a vague description.
+- Recommended format: `<type>: <what changed>`.
 
-常用 `type`：
+Common `type` values:
 
-- `feat`: 新增功能
-- `fix`: 修复问题
-- `docs`: 文档更新
-- `refactor`: 重构但不改变行为
-- `test`: 测试相关改动
-- `chore`: 杂项维护
+- `feat`: add a new feature
+- `fix`: resolve a bug or problem
+- `docs`: update documentation
+- `refactor`: restructure code without changing behavior
+- `test`: add or update tests
+- `chore`: maintenance or housekeeping work
 
-示例：
+Examples:
 
 - `feat: add eat source ingestion for attachments`
 - `fix: resolve eat target path under home`
 - `docs: clarify eat update workflow`
 
-如果一次改动包含多个不相关主题，应拆分提交，而不是用一条含糊的 `commit message` 混在一起。
+If one set of changes includes multiple unrelated topics, split them into separate commits instead of combining them under one vague `commit message`.

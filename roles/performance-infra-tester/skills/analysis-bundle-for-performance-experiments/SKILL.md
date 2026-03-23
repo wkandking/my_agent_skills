@@ -1,52 +1,52 @@
 ---
 name: analysis-bundle-for-performance-experiments
-description: 用于把一次性能实验整理成可复用分析包，方便离线分析、复核和分享。
+description: Use to package a performance experiment into a reusable analysis bundle for offline analysis, review, and sharing.
 ---
 
 # Analysis Bundle For Performance Experiments
 
-## 目标
+## Goal
 
-把一次性能实验整理成结构稳定、证据完整的分析包，而不是只留下平均值或几张图。
+Turn a performance experiment into a stable, evidence-complete analysis bundle instead of leaving behind only averages or a few charts.
 
-## 最小输入
+## Minimum Inputs
 
-- 输入样本或候选点
-- workload 或请求定义
-- 原始执行结果
-- 聚合 summary
+- input samples or candidate points
+- workload or request definitions
+- raw execution results
+- aggregated summary
 
-## 输出目录
+## Output Layout
 
 - `inputs/`
-  - 输入样本
+  - input samples
   - workload
-  - 生成脚本
+  - generation scripts
 - `results/raw/`
-  - 原始明细
+  - raw records
   - summary
 - `results/derived/`
-  - 输入规模表
-  - 请求目录
-  - 单项对比表
-  - 聚合对比表
+  - input-size tables
+  - request catalog
+  - per-item comparison tables
+  - aggregated comparison tables
 - `README.md`
-  - 实验目标
-  - 执行方式
-  - 指标口径
-  - 目录说明
+  - experiment objective
+  - execution method
+  - metric definitions
+  - directory guide
 
-## 步骤
+## Workflow
 
-1. 整理输入样本，保留每个样本的规模信息。
-2. 整理 workload 或请求定义，保留名称、参数和文本。
-3. 执行实验并保留原始明细，不要只保留平均值。
-4. 生成单项对比表，把输入规模与时延连接起来。
-5. 生成聚合 summary，便于快速对比。
-6. 写 README，说明实验目标、执行方法和指标口径。
+1. Organize the input samples and preserve the size information for each sample.
+2. Organize the workload or request definitions, including names, parameters, and text.
+3. Run the experiment and keep the raw records instead of saving only averages.
+4. Generate per-item comparison tables that connect input size to latency.
+5. Generate an aggregated summary for quick comparison.
+6. Write a `README.md` that explains the experiment objective, execution method, and metric definitions.
 
-## 核心要求
+## Core Requirements
 
-1. 原始明细必须保留，不能只留平均值。
-2. 输入规模信息必须和时延结果一起保存，否则后续很难解释性能差异。
-3. 最终交付物应让别人只看分析包目录，就能复核实验输入、执行方式和主要结论。
+1. Raw records must be retained. Do not keep only averages.
+2. Input-size information must be stored alongside latency results, or later performance differences will be hard to explain.
+3. The final deliverable should let someone review the analysis bundle directory alone and still reconstruct the experiment inputs, execution method, and main conclusions.
