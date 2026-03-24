@@ -57,6 +57,16 @@ Keep the skill concise:
 - move long documentation to `references/`
 - move deterministic helpers to `scripts/`
 
+Default to Chinese when creating or updating a skill unless the user explicitly
+asks for another language:
+
+- keep `name` in ASCII English or hyphenated form
+- write frontmatter `description` in Chinese by default
+- write explanatory prose in `SKILL.md` in Chinese by default
+- keep `bash` commands, file paths, code identifiers, tool names, library
+  names, framework names, and precision-critical proper nouns in English or
+  their original form when that is clearer
+
 Prefer this shape:
 
 ```text
