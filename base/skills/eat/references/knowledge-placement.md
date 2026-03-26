@@ -41,12 +41,6 @@
 - URL
 - 粘贴文本
 
-对于最近一组附件：
-
-- 把整组附件当成一个集合，而不是只看最后一个
-- 先分别总结每个来源
-- 再给出一份合并结论
-
 对混合来源：
 
 - 处理所有可可靠读取的来源
@@ -67,8 +61,6 @@
 - 依赖特定领域解释规则
 - 依赖某个角色独有的报告或证据标准
 
-如果一个知识项只在单个角色内部有意义，优先放 `<root>/roles/<role>/...`，而不是共享层。
-
 ## 目标位置指南
 
 ### `AGENTS.md`
@@ -78,13 +70,7 @@
 - 入口级加载规则
 - 仓库布局规则
 - 高频、短小的操作提示
-- 通用环境绕行规则
-- “知识该放哪”这种入口提示
-
-适合：
-
-- “先加载共享知识，再加载角色知识”
-- “网络失败时优先走某代理端口”
+- 默认加载顺序
 
 不适合：
 
@@ -92,62 +78,24 @@
 - 一次性事件
 - 多步骤完整流程
 
-### `principles/`
+### `notes/`
 
-放长期有效的稳定规则：
+`notes/` 用于所有**非流程型**知识。放到 `notes/` 后，再用 frontmatter `kind` 指定语义：
 
-- 决策规则
-- 解释规则
-- 强行为约束
-- 证据标准
+- `kind: principle`
+  - 稳定约束
+  - 强行为规则
+  - 决策边界
 
-适合：
+- `kind: insight`
+  - 启发式
+  - 规律性认知
+  - 可复用判断框架
 
-- “优先使用共享知识，除非任务明显属于某个角色”
-- “不要把环境漂移直接当成产品缺陷证据”
-
-不适合：
-
-- 短期临时技巧
-- 纯历史叙述
-
-### `insights/`
-
-放从重复工作中提炼出的模式：
-
-- 启发式
-- 常见失败模式
-- 权衡模式
-- 可预测某类问题的信号
-
-适合：
-
-- “多次 benchmark 抖动往往先指向环境噪声，而不是应用回归”
-- “用户两次改范围时，应先单独抽取稳定约束”
-
-不适合：
-
-- 没有泛化价值的单次事件
-- 本应写成硬规则的内容
-
-### `experience/`
-
-放具体历史事件：
-
-- 事故
-- 复盘
-- 一次性决策
-- 具体回顾
-
-适合：
-
-- “2026 年 3 月某次故障期间必须走 7741 代理端口”
-- “曾有一次方案把角色私有知识误放到共享层，后来被拆分”
-
-不适合：
-
-- 缺少具体事件背景的泛泛建议
-- 为复用而设计的流程
+- `kind: experience`
+  - 具体历史事件
+  - 复盘
+  - 一次性案例和证据链
 
 ### `skills/`
 
@@ -158,47 +106,40 @@
 - 运行手册
 - 输出结构需要标准化的任务
 
-适合：
+### `questions.md`
 
-- “把上下文总结为可复用知识并推荐落库位置”
-- “校验技能目录并安装到 Codex”
+放已知未知：
 
-不适合：
-
-- 单条独立规则
-- 没有流程的事实信息
+- 暂时还不稳定，不足以写成 `note`
+- 需要保留下来提醒未来任务的疑问
+- 还没有足够证据升级成原则、insight 或经验案例
 
 ## 共享与角色路径示例
 
+如果目标根目录本身就是一个轻量知识库：
+
 - 共享入口规则：`<root>/AGENTS.md`
-- 共享原则：`<root>/principles/<topic>.md`
-- 共享洞察：`<root>/insights/<topic>.md`
-- 共享经验：`<root>/experience/<topic>.md`
+- 共享 note：`<root>/notes/<topic>.md`
 - 共享技能：`<root>/skills/<skill-name>/SKILL.md`
+- 共享问题：`<root>/questions.md`
 
 - 角色入口规则：`<root>/roles/<role>/AGENTS.md`
-- 角色原则：`<root>/roles/<role>/principles/<topic>.md`
-- 角色洞察：`<root>/roles/<role>/insights/<topic>.md`
-- 角色经验：`<root>/roles/<role>/experience/<topic>.md`
+- 角色 note：`<root>/roles/<role>/notes/<topic>.md`
 - 角色技能：`<root>/roles/<role>/skills/<skill-name>/SKILL.md`
+- 角色问题：`<root>/roles/<role>/questions.md`
 
 ## `home` 模式映射
 
-当目标根目录是 `$HOME/my_agent_skills` 时，如果仓库已经有 `base/` 和 `roles/`，不要把共享知识直接写到容器根目录下。
-
-应按以下映射：
+当目标根目录是 `$HOME/my_agent_skills` 时，应按当前仓库结构映射：
 
 - 共享入口规则：`<root>/base/AGENTS.md`
-- 共享原则：`<root>/base/principles/<topic>.md`
-- 共享洞察：`<root>/base/insights/<topic>.md`
-- 共享经验：`<root>/base/experience/<topic>.md`
+- 共享 note：`<root>/base/notes/<topic>.md`
 - 共享技能：`<root>/base/skills/<skill-name>/SKILL.md`
 
 - 角色入口规则：`<root>/roles/<role>/AGENTS.md`
-- 角色原则：`<root>/roles/<role>/principles/<topic>.md`
-- 角色洞察：`<root>/roles/<role>/insights/<topic>.md`
-- 角色经验：`<root>/roles/<role>/experience/<topic>.md`
+- 角色 note：`<root>/roles/<role>/notes/<topic>.md`
 - 角色技能：`<root>/roles/<role>/skills/<skill-name>/SKILL.md`
+- 角色问题：`<root>/roles/<role>/questions.md`
 
 在 `home` 模式下，提案应主动查看 `<root>/roles/` 下已有角色，并明确说明为什么内容应放到 `base` 或某个角色目录。
 
@@ -207,27 +148,18 @@
 如果目标知识根目录缺少必要结构，并且用户已确认写入，只初始化真正需要的部分：
 
 - `<root>/AGENTS.md`
-- `<root>/principles/`
-- `<root>/insights/`
-- `<root>/experience/`
+- `<root>/notes/`
 - `<root>/skills/`
+- `<root>/questions.md`
+
+如果需要角色层，再按需创建：
+
+- `<root>/roles/<role>/AGENTS.md`
+- `<root>/roles/<role>/notes/`
+- `<root>/roles/<role>/skills/`
+- `<root>/roles/<role>/questions.md`
 
 不要提前创建没有被内容命中的角色目录。
-
-如果要创建一个新的根级 `AGENTS.md`，用最小索引初始化：
-
-```md
-# 知识索引
-
-## 目录
-
-- `principles/`: 稳定规则
-- `insights/`: 反复出现的模式和经验
-- `experience/`: 具体事件和决策
-- `skills/`: 可复用流程
-```
-
-初始文件要尽量简洁，重点是保证后续写入有一致结构。
 
 ## 起草规则
 
@@ -236,7 +168,8 @@
 1. 给出符合当前仓库结构的最窄路径
 2. 高频短规则优先落到现有入口文件
 3. 如果最佳目标文件不存在，直接推荐新文件路径，而不是硬塞到错误文件里
-4. 解释为什么该目标比附近替代项更合适
+4. 如果是 `note`，必须同时给出 `kind`
+5. 解释为什么该目标比附近替代项更合适
 
 ## 写入规则
 
@@ -258,5 +191,3 @@
 3. 两种模式都必须先出提案，再改文件
 4. 两种模式都必须得到用户明确批准
 5. 源技能以 `$HOME/my_agent_skills` 下的版本为准，先改源，再同步安装副本
-6. 如果用户批准，两种模式都应在更新源文件后重新安装到 Codex 技能目录
-7. 维护改动应尽量小、证据充分，不做无根据重写
