@@ -1,4 +1,5 @@
 ---
+kind: principle
 description: "agent 工作中接触凭证时的安全原则：不提交、不硬编码、不打印"
 triggers:
   - "凭证"
@@ -6,6 +7,8 @@ triggers:
   - "token"
   - "API key"
   - "安全"
+source:
+  - "base/principles/credential-safety.md"
 ---
 
 # 凭证安全原则

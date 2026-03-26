@@ -1,10 +1,13 @@
 ---
+kind: principle
 description: "添加新功能前先查项目已有惯例（命名、迁移脚本、CLI 风格），避免风格不一致返工"
 triggers:
   - "新功能"
   - "惯例"
   - "命名规范"
   - "迁移脚本"
+source:
+  - "base/principles/check-conventions-first.md"
 ---
 
 # 先查项目惯例再动手

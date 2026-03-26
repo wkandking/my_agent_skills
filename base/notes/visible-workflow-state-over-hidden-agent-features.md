@@ -1,4 +1,5 @@
 ---
+kind: insight
 description: "对 coding agent 来说，任务状态、环境知识与长任务控制应优先外显到文件、CLI 与日志，而不是藏在 TODO/plan/MCP/sub-agent 黑盒里"
 triggers:
   - "MCP"
@@ -10,6 +11,8 @@ triggers:
   - "可观察性"
   - "黑盒 agent"
   - "上下文工程"
+source:
+  - "base/insights/visible-workflow-state-over-hidden-agent-features.md"
 ---
 
 # Insight: 外显工作状态优于黑盒 agent 特性

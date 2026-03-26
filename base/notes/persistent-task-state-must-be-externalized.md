@@ -1,4 +1,5 @@
 ---
+kind: principle
 description: "需要跨 session、跨 agent 保留的任务状态，必须外显到文件、branch、日志或标准 CLI 产物；不要只依赖 harness 的隐式状态"
 triggers:
   - "任务状态"
@@ -9,6 +10,7 @@ triggers:
   - "MCP"
   - "可观察性"
 source:
+  - "base/principles/persistent-task-state-must-be-externalized.md"
   - "base/insights/visible-workflow-state-over-hidden-agent-features.md"
 ---
 
@@ -60,5 +62,5 @@ Agent 在单个 session 内维护 plan、上下文和工具状态很方便，但
 
 ## 进一步阅读
 
-- `base/insights/visible-workflow-state-over-hidden-agent-features.md`
-- `base/principles/git-worktree.md`
+- `base/notes/visible-workflow-state-over-hidden-agent-features.md`
+- `base/notes/git-worktree.md`

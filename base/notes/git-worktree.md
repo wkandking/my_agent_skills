@@ -1,10 +1,13 @@
 ---
+kind: principle
 description: "多 agent 并行开发时使用 git worktree 隔离工作目录的规范"
 triggers:
   - "worktree"
   - "多 agent"
   - "并行开发"
   - "分支隔离"
+source:
+  - "base/principles/git-worktree.md"
 ---
 
 # Git Worktree 多 Agent 协作规范

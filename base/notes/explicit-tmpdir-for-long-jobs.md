@@ -1,4 +1,5 @@
 ---
+kind: principle
 description: "长任务/高并行任务禁止依赖默认 /tmp；必须显式指定 TMPDIR/临时目录到可控路径，并把清理设计成可独立执行（假设随时 SIGKILL）"
 triggers:
   - "TMPDIR"
@@ -7,6 +8,8 @@ triggers:
   - "/tmp"
   - "OOM kill"
   - "Exit Code 137"
+source:
+  - "base/principles/explicit-tmpdir-for-long-jobs.md"
 ---
 
 # 长任务必须显式指定临时目录（禁止默认 `/tmp`）
