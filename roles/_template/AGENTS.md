@@ -1,41 +1,30 @@
-# <角色名称>
+# <role-name>
 
-## 职责
+## Role Summary
 
-<!-- 描述该角色的主要职责 -->
+<!-- 一两句话说明这个角色负责什么、不负责什么。 -->
 
-## 使用的工具
+## Use This Role When
 
-<!-- 列出该角色常用的工具 -->
+<!-- 列出应选择这个角色的场景。 -->
 
-## 相关知识
+## Do Not Use This Role For
 
-<!-- 列出该角色依赖的 base 知识 -->
+<!-- 列出不该继续停留在这个角色里的任务。 -->
 
-## 角色知识索引
+## Skills
 
-> 本索引是 agent 的**首要加载入口**。先读索引了解有哪些知识，再按需 `Read` 具体文件。不要一次性加载所有文档。
->
-> 每条摘要必须包含**足够的关键词**，让 agent 能判断是否与当前任务相关。
+<!-- - `skills/<skill-name>/SKILL.md` — 一句话说明它解决什么执行问题 -->
 
-### Skills
-<!-- - `skills/<skill-name>/SKILL.md` — 关键词丰富的摘要（2-3 句） -->
+## Notes
 
-### Principles
-<!-- - `principles/xxx.md` — 关键词丰富的摘要（2-3 句） -->
-
-### Insights
-<!-- - `insights/xxx.md` — 关键词丰富的摘要（2-3 句） -->
-
-### Experience（按需查阅，不常驻加载）
 <!--
-- `experience/xxx.md` — 关键词丰富的摘要（2-3 句）；写作结构可参考 `experience/TEMPLATE.md`
-
-建议的“唤醒路径”：
-1) 默认：先命中 skill/principle/insight（triggers）→ 再在其中通过 source / “Escalate to experience if” 升级加载 experience
-2) 例外：当出现明确症状（报错/异常现象）或是高风险任务（迁移/发布/回滚/权限）时，可直接用关键词命中 experience
+- `notes/<note>.md` — 一句话摘要
+  - `kind: principle` 用于硬约束
+  - `kind: insight` 用于判断框架
+  - `kind: experience` 用于历史案例
 -->
 
-### Questions（已知的未知）
+## Questions
 
-- `questions.md` — N 条待验证（简单疑问一行 checkbox，需要背景的展开为 `##` 小节）
+- `questions.md` — N 条待验证
