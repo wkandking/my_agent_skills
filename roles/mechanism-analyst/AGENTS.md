@@ -16,7 +16,7 @@
 
 ## Skills
 
-- 暂无角色专用 skill
+- `skills/mechanism-analysis-workflow/SKILL.md` — 机制问题研究 workflow：先分离语义、计划、执行、表达式/内核四层，再用最小复现、`EXPLAIN`/`PROFILE` 和源码建立证据链
 
 ## Notes
 
