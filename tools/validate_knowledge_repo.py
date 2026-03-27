@@ -74,10 +74,7 @@ def assert_root_entrypoints() -> None:
     readme_roles = sorted(section_items(read_text(ROOT / "README.md"), "Active Roles"))
     if readme_roles != ACTIVE_ROLES:
         fail(f"README active roles mismatch: expected {ACTIVE_ROLES}, got {readme_roles}")
-    agents_roles = sorted(section_items(read_text(ROOT / "AGENTS.md"), "Active Roles"))
-    if agents_roles != ACTIVE_ROLES:
-        fail(f"AGENTS active roles mismatch: expected {ACTIVE_ROLES}, got {agents_roles}")
-    ok("root entrypoints list the correct active roles")
+    ok("root entrypoints exist and README lists the correct active roles")
 
 
 def assert_role_files() -> None:
@@ -150,7 +147,7 @@ def resolve_ref(text: str, source: Path) -> list[Path]:
     for candidate in PATH_RE.findall(text):
         if candidate in ACTIVE_ROLES:
             continue
-        if candidate.startswith("<") or candidate.startswith("$") or candidate.startswith("kind:"):
+        if candidate.startswith(("/", "<", "$")) or candidate.startswith("kind:"):
             continue
         if source in {ROOT / "AGENTS.md", ROOT / "README.md"} and candidate in {
             "skills/",

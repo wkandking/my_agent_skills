@@ -26,11 +26,16 @@ agent-knowledge-framework/
 
 ## Knowledge Loading and Sedimentation
 
-- Persistent context: this file plus the relevant role `AGENTS.md` files
+- Persistent context: `AGENTS.md` (this file) plus the relevant role `AGENTS.md` files
 - Layered loading: entrypoints first, then one relevant `skill` or `note`, then one more only if needed
 - Direct access for symptoms or high-risk work: when a task has a concrete failure mode or higher operational risk, go directly to the most relevant shared or role-specific `note`
 - After context compression: if you are no longer sure about the active roles, shared layer, or loading order, re-read this file, the relevant role `AGENTS.md`, and `base/AGENTS.md` when shared concerns apply
-- After important work: proactively consider sedimentation when a task exposed a reusable rule, decision pattern, or historical lesson worth keeping
+
+Detailed loading strategy (persistent vs on-demand context, layered escalation, and compression recovery) is documented in `base/notes/knowledge-loading.md`.
+
+When the user explicitly asks to preserve reusable knowledge, or explicitly triggers `/eat`, use `base/skills/eat/` to perform sedimentation.
+
+Detailed sedimentation guidance (note kinds such as principle / insight / experience, skill vs note decisions, placement, extraction flow, and anti-patterns) is documented in `base/notes/knowledge-sedimentation.md`.
 
 ## Knowledge Model
 

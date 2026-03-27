@@ -1,25 +1,17 @@
 ---
 kind: principle
-description: "Use layered loading by default, escalate only when needed, and proactively consider sedimentation after important work."
+description: "Use layered loading by default, keep persistent context small, and escalate only when the task truly needs more shared or role-specific knowledge."
 triggers:
   - "knowledge loading"
   - "layered loading"
+  - "persistent context"
   - "context compression"
-  - "sedimentation"
   - "when to read base"
 ---
 
-# Loading and Sedimentation
+# Knowledge Loading
 
 This repository uses layered loading to keep context small while preserving access to shared and role-specific knowledge.
-
-## Default Loading Path
-
-1. Read the root `AGENTS.md`
-2. Read the relevant role `AGENTS.md`
-3. If the task touches shared concerns, read `base/AGENTS.md`
-4. Read one relevant `skill` or `note`
-5. Read one more `note` or `questions.md` only if the task still needs more context
 
 ## Persistent Context
 
@@ -36,6 +28,14 @@ Add `base/AGENTS.md` when the task touches shared concerns such as:
 - knowledge sedimentation
 - skill creation
 - shared repository workflow rules
+
+## Default Loading Path
+
+1. Read the root `AGENTS.md`
+2. Read the relevant role `AGENTS.md`
+3. If the task touches shared concerns, read `base/AGENTS.md`
+4. Read one relevant `skill` or `note`
+5. Read one more `note` or `questions.md` only if the task still needs more context
 
 ## When to Escalate
 
@@ -61,14 +61,3 @@ re-read:
 1. root `AGENTS.md`
 2. the relevant role `AGENTS.md`
 3. `base/AGENTS.md` when shared concerns apply
-
-## Sedimentation Trigger
-
-After important work, proactively consider sedimentation when the task exposed:
-
-- a reusable rule or guardrail
-- a stable decision pattern
-- a historical lesson worth preserving
-- a known unknown that should move into `questions.md`
-
-Use `eat` when the task is to convert source material into reusable knowledge.
