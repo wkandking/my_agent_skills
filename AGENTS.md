@@ -37,14 +37,9 @@ When the user explicitly asks to preserve reusable knowledge, or explicitly trig
 
 Detailed sedimentation guidance (note kinds such as principle / insight / experience, skill vs note decisions, placement, extraction flow, and anti-patterns) is documented in `base/notes/knowledge-sedimentation.md`.
 
-## Knowledge Model
-
-- `skills/`: executable workflows
-- `notes/`: rules, decision heuristics, and historical cases
-- `questions.md`: known unknowns
-
 ## Collaboration
 
 - Any write must happen in a worktree
 - Do not develop in the main workspace
-- Important changes go through PR review
+
+See `base/notes/git-worktree.md` for the detailed workflow and guardrails.
