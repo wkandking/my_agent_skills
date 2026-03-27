@@ -18,6 +18,7 @@ Shared knowledge used across roles.
 
 ## Notes
 
+- `notes/loading-and-sedimentation.md`
 - `notes/git-worktree.md`
 - `notes/credential-safety.md`
 - `notes/check-conventions-first.md`

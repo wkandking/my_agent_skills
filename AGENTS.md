@@ -25,6 +25,14 @@ Before starting any task, every agent must read this file and the relevant role 
 4. Read one relevant shared or role-specific `skill` or `note`
 5. Read `questions.md` or one extra `note` only if needed
 
+## Knowledge Loading and Sedimentation
+
+- Persistent context: this file plus the relevant role `AGENTS.md` files
+- Layered loading: entrypoints first, then one relevant `skill` or `note`, then one more only if needed
+- Direct access for symptoms or high-risk work: when a task has a concrete failure mode or higher operational risk, go directly to the most relevant shared or role-specific `note`
+- After context compression: if you are no longer sure about the active roles, shared layer, or loading order, re-read this file, the relevant role `AGENTS.md`, and `base/AGENTS.md` when shared concerns apply
+- After important work: proactively consider sedimentation when a task exposed a reusable rule, decision pattern, or historical lesson worth keeping
+
 ## Knowledge Model
 
 - `skills/`: executable workflows
