@@ -17,6 +17,9 @@ Use `eat` when the user explicitly asks to preserve reusable knowledge, or expli
 
 Prefer user-triggered sedimentation over automatic post-task sedimentation. This keeps sedimentation deliberate and avoids filling the repository with low-signal summaries.
 
+This note defines the repository-level judgment model: what should be sedimented, what target type fits, and when knowledge belongs in `base/` versus `roles/<role>/`.
+Operational details for `/eat` belong in `base/skills/eat/SKILL.md`, and exact path mapping belongs in `base/skills/eat/references/knowledge-placement.md`.
+
 ## Smallest Useful Targets
 
 Choose the smallest target that preserves the value:

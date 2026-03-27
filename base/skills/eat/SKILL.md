@@ -1,357 +1,105 @@
 ---
 name: eat
-description: 当用户希望把当前上下文、文档、仓库、图片、PDF、URL 或其他来源沉淀为可复用知识时，判断它应写成 AGENTS 规则、note、skill 或 question；如果是 note，再判断其 `kind` 是 principle、insight 还是 experience。
+description: 当用户希望把当前上下文、文件、仓库、URL、图片、PDF 或其他来源沉淀为可复用知识，或明确触发 `/eat` 时使用。
 ---
 
 # Eat
 
 ## 概述
 
-这个技能用于“吃掉”当前上下文，把真正值得长期复用的内容沉淀成知识。
+这个技能用于把当前上下文中真正值得长期复用的部分沉淀成知识。
 
-目标不是把所有内容都保存下来，而是：
+目标不是“保存一切”，而是：
 
-- 识别哪些内容值得保留
-- 判断它应放在共享层还是角色层
+- 判断哪些内容值得保留
+- 判断应放在共享层还是角色层
 - 选择最合适的知识类型
-- 在 `note` 场景下，为内容选择正确的 `kind`
-- 产出可直接复用的 Markdown 草稿，或在 `skill` 场景下产出交接草稿
-- 在获得用户明确确认后，再写入目标知识库
+- 生成可复用草稿或下游交接信息
 
-决定落库位置前，先读取 `references/knowledge-placement.md`。
+开始提案前先读取：
 
-## 调用方式
+- `base/notes/knowledge-sedimentation.md`：沉淀边界、目标类型、shared vs role 判断
+- `references/knowledge-placement.md`：根目录解析、路径映射、落盘规则
+- `references/output-contract.md`：正常模式和维护模式的输出格式
 
-支持以下简写：
+## Modes
 
-- `/eat`
-- `/eat project`
-- `/eat home`
-- `/eat update`
-- `/eat update all`
-
-解释规则：
-
-- `/eat` 等同于 `/eat project`
-- `/eat project`：目标知识根目录为当前项目根目录
-- `/eat home`：目标知识根目录为 `$HOME/my_agent_skills`
-- `/eat update`：只基于当前会话，反思 `eat` 在这次对话中的问题
+- `/eat` 或 `/eat project`：目标根目录是当前项目根目录
+- `/eat home`：目标根目录是 `$HOME/my_agent_skills`
+- `/eat update`：只基于当前会话反思 `eat`
 - `/eat update all`：基于当前会话 + 当前磁盘上的 `eat` 维护资产一起反思
 
 `project` 和 `home` 是保留别名，不接受任意路径参数。
 
-## 核心规则
+## Core Rules
 
-### 1. 第一次回复只给方案，不直接写文件
+### 1. 先提案，后写入
 
-无论是普通沉淀还是维护 `eat` 自身：
+无论是普通沉淀还是维护 `eat`：
 
-- 第一次回复只给分析和提案
-- 不直接修改任何文件
-- 所有可写入候选项必须使用稳定编号，按 `1. 2. 3.` 顺序输出
+- 第一次回复只给分析和提案，不直接改文件
+- 所有可写入候选项必须编号为 `1. 2. 3.`
 - 只有在用户明确确认后，才执行写入
-- 用户可以确认全部编号项，也可以只确认部分编号项，例如 `1 同意`、`1 3 同意`
+- 用户可以确认全部，也可以只确认部分，例如 `1 同意`、`1 3 同意`
 
-### 2. 优先选择最合适的来源
+### 2. 优先处理最合适的来源
 
-普通沉淀模式按以下顺序选择来源：
+普通模式按以下顺序选来源：
 
-1. 用户在当前消息里明确指定的来源
+1. 用户当前消息里明确指定的来源
 2. 最近一组附件
 3. 当前会话上下文
 
-混合来源时：
+对混合来源：
 
-- 尽可能处理所有可读来源
-- 不可读或不支持的来源要标记为跳过，并给出简短原因
-- 不因为其中一个来源失败就放弃整组来源
+- 尽量处理所有可读来源
+- 对不可读或不支持的来源标记 `skipped: <reason>`
+- 不因为一个来源失败就放弃整组来源
 
-### 3. 不是所有内容都该保存
+### 3. 不值得长期复用的内容不要存
 
-以下情况通常不应沉淀：
+是否应沉淀、应存成什么类型，遵循 `base/notes/knowledge-sedimentation.md`。
 
-- 只适用于一次临时情境
-- 很快会失效
-- 只是当前任务的重复表述
-- 缺少足够上下文，后续无法安全复用
-- 已经被现有稳定规则覆盖，没有新增价值
-
-边界不清时，要明确说明风险。
-
-### 4. 先判断共享还是角色私有
-
-先判断内容属于：
-
-- 共享知识：跨角色通用
-- 角色知识：强依赖某个角色的职责、工具、解释口径或输出标准
-
-如果是在 `home` 模式下：
-
-- 共享知识默认写入 `base/`
-- 角色知识默认写入 `roles/<role>/`
-
-### 5. 新模型只保留四种目标
-
-对每个候选知识项，先选以下四种目标之一：
-
-1. `AGENTS rule`
-2. `note`
-3. `skill`
-4. `question`
-
-如果都不合适，就判为 `Do Not Store`。
-
-#### `AGENTS rule`
-
-适合：
-
-- 高频、短小、开工即需的入口规则
-- 仓库布局提示
-- 默认加载顺序
-
-#### `note`
-
-适合所有**非流程型**知识。`note` 必须再选一个 `kind`：
-
-- `principle`：硬约束、强行为规则、稳定边界
-- `insight`：判断框架、规律性认知、可复用启发式
-- `experience`：具体历史事件、案例、复盘和证据
-
-#### `skill`
-
-适合多步骤可复用流程：
-
-- 操作流程
-- review checklist
-- 运行手册
-- 输出结构需要标准化的任务
-
-#### `question`
-
-适合还不够稳定、但值得保留的已知未知：
-
-- 只有一个数据点，暂时不足以升成原则或 insight
-- 当前注意到了，但没条件验证
-- 后续遇到相关任务时需要显式提醒“不确定性还在”
-
-### 6. `skill` 必须交给 `skill-creator-codex`
+### 4. `skill` 交给 `skill-creator-codex`
 
 当候选知识被判定为 `skill` 时：
 
-- `eat` 只负责判断、放置建议和交接信息，不负责完成最终 skill 创建
-- `eat` 不直接输出最终可落库的完整 `SKILL.md`
-- 在用户确认继续后，必须切换到 `skill-creator-codex` 执行正式创建流程
-- 交接内容必须覆盖触发条件、目标路径、预期输出、来源证据和语言要求
+- `eat` 只负责判断、路径建议和 handoff
+- `eat` 不直接产出最终 `SKILL.md`
+- 用户确认后，必须切换到 `skill-creator-codex`
 
-## 正常模式的输出格式
+## Decision Step
 
-先描述来源集合：
+对每个候选项都先完成两个判断：
 
-```md
-## Source Set
-- Target Root: `<exact path>`
-- Source Mode: <explicit source | recent attachment group | current conversation>
-- Processed Sources:
-  - `<source>`: <processed | skipped: reason>
-```
+1. 它是否值得沉淀
+2. 如果值得，应该落到什么目标与什么路径
 
-如果目标是 `home`，还要额外说明：
+具体判断标准不要在这里重复定义：
 
-```md
-- Existing Shared Layer: `<root>/base`
-- Existing Roles:
-  - `<role>`
-- Placement Default:
-  - `shared -> base`
-  - `role-specific -> roles/<role>`
-```
+- 目标类型与 shared / role 归属：看 `base/notes/knowledge-sedimentation.md`
+- 目标根目录与精确路径：看 `references/knowledge-placement.md`
 
-然后对每个来源输出：
+## Output
 
-```md
-## 来源总结：<source label>
-- Source Type: <file | repo | image | pdf | document | url | pasted text | conversation>
-- Key Takeaway: <1-3 句中文总结>
-```
+普通模式和维护模式的输出格式，统一遵循 `references/output-contract.md`。
 
-对每个 `note` 候选输出，并为每个可写入候选项分配稳定编号：
+## Write Phase
 
-```md
-### 1. 候选知识：<short statement>
-- Scope: <shared | role-specific:<role>>
-- Knowledge Type: note
-- Note Kind: <principle | insight | experience>
-- Recommended Path: `<exact repository path>`
-- Why Here: <1-3 句说明>
-- Draft:
-
-```md
----
-kind: <principle | insight | experience>
-description: "<一句话摘要>"
-triggers:
-  - "<关键词>"
-source:
-  - "<source or original path>"
----
-
-<paste-ready markdown>
-```
-```
-
-对 `AGENTS rule` 候选输出：
-
-```md
-### 2. 候选知识：<short statement>
-- Scope: <shared | role-specific:<role>>
-- Knowledge Type: AGENTS rule
-- Recommended Path: `<exact repository path>`
-- Why Here: <1-3 句说明>
-- Draft:
-
-```md
-<paste-ready markdown>
-```
-```
-
-对每个 `skill` 候选输出：
-
-```md
-### 3. 候选知识：<short statement>
-- Scope: <shared | role-specific:<role>>
-- Knowledge Type: skill
-- Recommended Path: `<exact repository path>`
-- Why Skill: <1-3 句说明>
-- Skill Handoff:
-  - Creator: `skill-creator-codex`
-  - What the skill should do: <1-3 句中文说明>
-  - When it should trigger: <触发条件列表>
-  - Expected output shape: <技能应产出的结果形态>
-  - Relevant source evidence:
-    - <source or conversation evidence>
-  - Language Requirements:
-    - `name` 使用英文或连字符格式
-    - frontmatter `description` 默认使用中文
-    - `SKILL.md` 正文默认使用中文
-    - `bash` 命令、文件路径、代码标识符、工具名、库名、框架名、专有名词，以及使用英文更精确的表述保留英文或原文
-  - Open questions:
-    - <需要 `skill-creator-codex` 继续澄清的问题；如无则写 `None`>
-```
-
-对 `question` 候选输出：
-
-```md
-### 4. 候选知识：<short statement>
-- Scope: <shared | role-specific:<role>>
-- Knowledge Type: question
-- Recommended Path: `<exact repository path>`
-- Why Here: <1-3 句说明>
-- Draft:
-
-```md
-- [ ] <question text>
-```
-```
-
-对不应保存的项输出：
-
-```md
-### 候选知识：<short statement>
-- Scope: <shared | role-specific:<role> | unclear>
-- Decision: Do Not Store
-- Reason: <原因>
-```
-
-最后补：
-
-```md
-## 合并结论
-- Summary: <中文总结>
-- Cross-Source Notes:
-  - <note>
-
-## 应用摘要
-- Target Root: `<exact path>`
-- Files To Create:
-  - `<path>`
-- 待更新文件:
-  - `<path>`
-- Confirmation Required: `No files will be changed until the user explicitly confirms all numbered items or a selected subset of numbered items.`
-```
-
-如果没有任何内容值得保存，就直接说明，不要求确认。
-
-如果有可写入候选项，要在 `## 应用摘要` 后补充一行确认提示，例如：
-
-```md
-可确认方式示例：
-- `全部同意`
-- `1 同意`
-- `1 3 同意`
-```
-
-## 维护模式
-
-### `/eat update`
-
-只使用当前会话作为证据来源，不主动读取现有 `eat` 维护资产，除非用户明确要求。
-
-### `/eat update all`
-
-使用当前会话 + 当前磁盘上的 `eat` 维护资产，例如：
-
-- `base/skills/eat/SKILL.md`
-- `base/skills/eat/references/knowledge-placement.md`
-
-两种模式都必须：
-
-- 先给提案
-- 不提前改文件
-- 只有在用户明确确认后才修改
-- 若修改通过，应先更新 `$HOME/my_agent_skills` 下的源技能，再同步已安装副本
-- 禁止只修改已安装副本而不回写源技能
-- 如果当前上下文已经暴露出 source / installed 漂移，必须优先把该漂移列为修复项
-
-修改完成后，必须执行维护校验：
-
-1. 检查源技能与已安装副本是否一致
-2. 如果不一致，明确报告哪些差异仍未同步
-3. 未完成一致性校验前，不要宣称 `eat` 已更新完成
-
-维护模式下使用以下格式：
-
-```md
-## 失败摘要
-- Issue: <eat 做错了什么>
-- Evidence Scope: <current context only | current context + existing eat assets>
-
-## 根因
-- <1-3 句说明>
-
-## 规则变更
-1. <拟议规则变化>
-
-## 待更新文件
-- `<path>`
-
-## 补丁草稿
-```
-
-如果维护模式里存在多个独立可应用的变更项，也必须按 `1. 2. 3.` 编号，并允许用户只确认其中一部分。
-
-## 写入规则
-
-在用户确认后执行写入时：
+用户确认后再执行写入：
 
 1. 如果目标文件已存在，先读取
 2. 尽量局部追加或合并，不整文件重写
-3. 复用目标文件的局部语气和标题风格
-4. 主题明显一致时，把多个候选项合并到一个新文件中
-5. 若发现候选内容与现有规则重复，应跳过写入并说明已覆盖
+3. 复用目标文件已有语气和标题风格
+4. 明显同题的候选项合并到一个文件
+5. 与现有稳定规则重复的内容跳过，并说明原因
 6. 只写入用户明确确认过的编号项
-7. 如果用户的确认表达无法唯一映射到编号项，先复述已识别到的编号集合并等待澄清，不直接写文件
-8. 如果确认写入的目标是 `skill`，不要由 `eat` 直接完成最终 skill 文档，而是切换到 `skill-creator-codex`
+7. 如果确认表达无法唯一映射到编号项，先复述识别到的编号并等待澄清
+8. 若确认写入的是 `skill`，切换到 `skill-creator-codex`
 
-## 自维护边界
+对 `eat` 自维护：
 
-`eat` 更新自己时，以 `$HOME/my_agent_skills` 下的源技能为准，不要把已安装副本当成唯一真相。
+- 以 `$HOME/my_agent_skills` 下的源技能为准
+- 先改源技能，再同步已安装副本
+- 修改完成后检查源技能与已安装副本是否一致
+- 未完成一致性校验前，不要宣称 `eat` 已更新完成
