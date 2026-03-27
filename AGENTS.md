@@ -1,6 +1,6 @@
 # Agent Knowledge Repo
 
-This repository stores reusable role knowledge and shared skills for coding agents.
+每个 agent 在开始任何任务前，必须先通读本文件和相关角色的 `AGENTS.md`，再开始动手。
 
 ## Repository Structure
 
