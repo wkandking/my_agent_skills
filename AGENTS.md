@@ -1,6 +1,6 @@
 # Agent Knowledge Repo
 
-每个 agent 在开始任何任务前，必须先通读本文件和相关角色的 `AGENTS.md`，再开始动手。
+Before starting any task, every agent must read this file and the relevant role `AGENTS.md` files.
 
 ## Repository Structure
 
