@@ -1,10 +1,10 @@
-# 输出格式合同
+# Output Contract
 
-当 `eat` 产出提案时，统一使用本合同。
+Use this contract whenever `eat` produces a proposal.
 
-## 普通模式
+## Normal Mode
 
-先输出来源集合：
+Start with the source set:
 
 ```md
 ## Source Set
@@ -14,7 +14,7 @@
   - `<source>`: <processed | skipped: reason>
 ```
 
-如果是 `home` 模式，再补：
+If this is `home` mode, also add:
 
 ```md
 - Existing Shared Layer: `<root>/base`
@@ -22,58 +22,58 @@
   - `<role>`
 ```
 
-然后每个来源只给最短总结：
+Then give the shortest useful summary for each source:
 
 ```md
-## 来源总结：<source label>
+## Source Summary: <source label>
 - Source Type: <file | repo | image | pdf | document | url | pasted text | conversation>
-- Key Takeaway: <1-3 句总结>
+- Key Takeaway: <1-3 sentence summary>
 ```
 
-每个**可写入候选项**都用同一最小结构：
+Every **writable candidate item** uses the same minimal structure:
 
 ```md
-### 1. 候选知识：<short statement>
+### 1. Candidate Knowledge: <short statement>
 - Scope: <shared | role-specific:<role>>
 - Knowledge Type: <AGENTS rule | note | skill | question>
 - Recommended Path: `<exact path>`
-- Why Here: <1-3 句说明>
+- Why Here: <1-3 sentence explanation>
 ```
 
-补充字段只在需要时出现：
+Additional fields appear only when needed:
 
-- `note`：再加 `Note Kind`
-- `AGENTS rule` / `note` / `question`：再加 `Draft`
-- `skill`：再加 `Skill Handoff`
-- 如有风险或边界不清：再加 `Risk`
+- `note`: add `Note Kind`
+- `AGENTS rule` / `note` / `question`: add `Draft`
+- `skill`: add `Skill Handoff`
+- if there is risk or unclear boundary: add `Risk`
 
-`Skill Handoff` 使用最小字段集：
+`Skill Handoff` uses this minimal field set:
 
 ```md
 - Skill Handoff:
   - Creator: `skill-creator-codex`
-  - Goal: <skill 应完成什么>
-  - Trigger: <何时触发>
+  - Goal: <what the skill should accomplish>
+  - Trigger: <when it should trigger>
   - Target Path: `<path>`
-  - Expected Output: <结果形态>
+  - Expected Output: <output shape>
   - Evidence:
     - <source or conversation evidence>
   - Open Questions:
     - <question | None>
 ```
 
-不应保存的项不编号：
+Items that should not be stored are not numbered:
 
 ```md
-### 候选知识：<short statement>
+### Candidate Knowledge: <short statement>
 - Decision: Do Not Store
-- Reason: <原因>
+- Reason: <reason>
 ```
 
-最后补：
+End with:
 
 ```md
-## 应用摘要
+## Application Summary
 - Files To Create:
   - `<path>`
 - Files To Update:
@@ -81,35 +81,35 @@
 - Confirmation Required: `No files will be changed until the user explicitly confirms all numbered items or a selected subset.`
 ```
 
-如果存在可写入候选项，最后再补一行：
+If there are writable candidate items, add one more line at the end:
 
 ```md
-可确认方式示例：`全部同意`、`1 同意`、`1 3 同意`
+Confirmation examples: `approve all`, `approve 1`, `approve 1 3`
 ```
 
-## 维护模式
+## Maintenance Mode
 
-`/eat update` 只使用当前会话作为证据来源。  
-`/eat update all` 使用当前会话 + 当前磁盘上的 `eat` 维护资产。
+`/eat update` uses only the current conversation as evidence.
+`/eat update all` uses the current conversation plus the `eat` maintenance assets currently on disk.
 
-维护模式统一输出：
+Maintenance mode always uses this format:
 
 ```md
-## 失败摘要
-- Issue: <eat 做错了什么>
+## Failure Summary
+- Issue: <what `eat` got wrong>
 - Evidence Scope: <current context only | current context + existing eat assets>
 
-## 根因
-- <1-3 句说明>
+## Root Cause
+- <1-3 sentence explanation>
 
-## 规则变更
-1. <拟议变更>
+## Rule Changes
+1. <proposed change>
 
-## 待更新文件
+## Files To Update
 - `<path>`
 
-## 补丁摘要
-- <准备怎么改>
+## Patch Summary
+- <what will be changed>
 ```
 
-如果存在多个独立可应用的变更项，也必须编号，并允许用户只确认其中一部分。
+If there are multiple independent applicable changes, they must also be numbered so the user can confirm only a subset.
