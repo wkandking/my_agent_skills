@@ -41,8 +41,9 @@ Whether in normal sedimentation mode or while maintaining `eat` itself:
 - all writable candidate items must use stable numbering like `1. 2. 3.`
 - writing happens only after explicit user confirmation
 - the user may confirm everything or only a subset, such as `1 approve` or `1 3 approve`
-- user-facing proposals and explanations default to Chinese
-- persisted content written into the knowledge repository defaults to English unless the user explicitly requests another language
+- in normal mode, all user-visible proposal output defaults to Chinese, including titles, field labels, `Why Here`, `Risk`, explanatory text under `Draft`, and natural-language content shown inside draft previews
+- persisted content written into the knowledge repository defaults to English only at the actual write stage unless the user explicitly requests another language
+- if future persisted English content must be previewed before writing, label it explicitly as `落库草稿预览（默认英文）` instead of using it as the main proposal body
 
 ### 2. Prefer the best available sources
 
@@ -98,7 +99,7 @@ After the user confirms, execute writes with these rules:
 6. Write only the items the user explicitly confirmed
 7. If a confirmation cannot be mapped unambiguously to item numbers, restate the recognized set and wait for clarification
 8. If the confirmed target is a `skill`, switch to `skill-creator-codex`
-9. Unless the user explicitly requests another language, keep user-facing communication in Chinese but write persisted repository content in English
+9. Unless the user explicitly requests another language, keep all user-visible proposal and confirmation communication in Chinese; switch to English by default only for content that is actually being persisted into repository files
 
 For `eat` self-maintenance:
 
