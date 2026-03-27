@@ -35,8 +35,6 @@ Detailed loading strategy (persistent vs on-demand context, layered escalation, 
 
 When the user explicitly asks to preserve reusable knowledge, or explicitly triggers `/eat`, use `base/skills/eat/` to perform sedimentation.
 
-Detailed sedimentation guidance (note kinds such as principle / insight / experience, skill vs note decisions, placement, extraction flow, and anti-patterns) is documented in `base/notes/knowledge-sedimentation.md`.
-
 ## Collaboration
 
 - Any write must happen in a worktree
