@@ -2,6 +2,8 @@
 
 Use this contract whenever `eat` produces a proposal.
 
+Template blocks below use English field names only to show structure. They are not a language requirement. Actual proposal language must follow the skill rules, which default user-visible proposal output to Chinese.
+
 ## Normal Mode
 
 Start with the source set:
@@ -49,8 +51,10 @@ Additional fields appear only when needed:
 
 Language rule:
 
-- explanations shown to the user default to Chinese
-- `Draft` content intended to be written into repository files defaults to English
+- all user-visible proposal content defaults to Chinese, including section titles, field labels, `Why Here`, `Risk`, explanatory text under `Draft`, and natural-language content shown inside proposal previews
+- template English indicates field structure only, not output language
+- content defaults to English only when it is actually being persisted into repository files
+- if future persisted English content must be previewed before writing, label it explicitly as `落库草稿预览（默认英文）` and do not present that English text as the main proposal body
 - if the user explicitly requests another language, follow the user's request
 
 `Skill Handoff` uses this minimal field set:

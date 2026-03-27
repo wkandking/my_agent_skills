@@ -41,8 +41,9 @@ Whether in normal sedimentation mode or while maintaining `eat` itself:
 - all writable candidate items must use stable numbering like `1. 2. 3.`
 - writing happens only after explicit user confirmation
 - the user may confirm everything or only a subset, such as `1 approve` or `1 3 approve`
-- user-facing proposals and explanations default to Chinese
-- persisted content written into the knowledge repository defaults to English unless the user explicitly requests another language
+- in normal mode, all user-visible proposal output defaults to Chinese, including titles, field labels, `Why Here`, `Risk`, explanatory text under `Draft`, and natural-language content shown inside draft previews
+- persisted content written into the knowledge repository defaults to English only at the actual write stage unless the user explicitly requests another language
+- if future persisted English content must be previewed before writing, label it explicitly as `落库草稿预览（默认英文）` instead of using it as the main proposal body
 
 ### 2. Prefer the best available sources
 
@@ -58,11 +59,21 @@ For mixed-source sets:
 - mark unreadable or unsupported sources as `skipped: <reason>`
 - do not abandon the whole set just because one source failed
 
-### 3. Do not store content that is not worth reusing
+### 3. Distinguish object knowledge from process knowledge first
+
+Before proposing candidate items in normal mode, decide what the user is actually trying to preserve:
+
+- if the user is mainly asking what is reusable about the subject itself, prioritize topic knowledge
+- if the user is mainly asking how the research, analysis, or problem-solving was done, prioritize process knowledge and workflow candidates before topic notes
+- when the source is primarily the current conversation, explicitly check all three candidate classes: topic knowledge, process knowledge, and skill candidate
+- if the conversation shows a stable multi-step workflow with repeatable inputs and outputs, propose at least one `skill` candidate instead of defaulting to notes only
+- for mechanism-analysis conversations, check role-layer reusable assets first: `insight/principle` for analysis heuristics, `experience` for full case studies, and `skill` for end-to-end investigation workflows
+
+### 4. Do not store content that is not worth reusing
 
 Whether something should be sedimented and what type it should become is governed by `base/notes/knowledge-sedimentation.md`.
 
-### 4. Hand off `skill` items to `skill-creator-codex`
+### 5. Hand off `skill` items to `skill-creator-codex`
 
 When a candidate item is classified as a `skill`:
 
@@ -76,6 +87,14 @@ For each candidate item, make two decisions first:
 
 1. whether it is worth sedimenting
 2. if yes, what target and path it should use
+
+When the evidence mainly comes from the current conversation, run this check explicitly before drafting candidates:
+
+1. topic knowledge: stable conclusions about the object under discussion
+2. process knowledge: reusable ways of framing questions, layering analysis, validating claims, or restructuring findings
+3. skill candidate: a stable multi-step workflow with recognizable inputs, outputs, and handoff shape
+
+If repeated steps such as framing a system model, adding concrete examples, tracing source code, validating boundaries, and restructuring the final document appear in the conversation, do not stop at `note` candidates only; propose whether that workflow should become a `skill`.
 
 Do not redefine the detailed criteria here:
 
@@ -98,7 +117,7 @@ After the user confirms, execute writes with these rules:
 6. Write only the items the user explicitly confirmed
 7. If a confirmation cannot be mapped unambiguously to item numbers, restate the recognized set and wait for clarification
 8. If the confirmed target is a `skill`, switch to `skill-creator-codex`
-9. Unless the user explicitly requests another language, keep user-facing communication in Chinese but write persisted repository content in English
+9. Unless the user explicitly requests another language, keep all user-visible proposal and confirmation communication in Chinese; switch to English by default only for content that is actually being persisted into repository files
 
 For `eat` self-maintenance:
 
