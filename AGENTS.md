@@ -15,14 +15,7 @@ This repository stores reusable role knowledge and shared skills for coding agen
 
 ## Shared Layer
 
-Read `base/AGENTS.md` when the task touches shared concerns such as:
-
-- any write operation or worktree workflow
-- credentials, secrets, or tokens
-- long-running tasks or cross-session task state
-- knowledge sedimentation
-- skill creation
-- shared repo workflow rules
+`base/AGENTS.md` is the shared entrypoint for cross-role knowledge.
 
 ## Load Rule
 
