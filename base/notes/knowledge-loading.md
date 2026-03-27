@@ -1,63 +1,78 @@
 ---
 kind: principle
-description: "Use layered loading by default, keep persistent context small, and escalate only when the task truly needs more shared or role-specific knowledge."
+description: "Detailed knowledge-loading strategy: layered loading, resident vs on-demand criteria, trigger-based priority loading, and reload behavior after context compression."
 triggers:
   - "knowledge loading"
   - "layered loading"
-  - "persistent context"
+  - "resident context"
+  - "on-demand loading"
   - "context compression"
-  - "when to read base"
+  - "compaction"
 ---
 
 # Knowledge Loading
 
-This repository uses layered loading to keep context small while preserving access to shared and role-specific knowledge.
-
-## Persistent Context
-
-The default persistent context is:
-
-- root `AGENTS.md`
-- the relevant role `AGENTS.md`
-
-Add `base/AGENTS.md` when the task touches shared concerns such as:
-
-- write operations and worktree workflow
-- credentials or secrets
-- long-running or cross-session task state
-- knowledge sedimentation
-- skill creation
-- shared repository workflow rules
+Role-specific and shared knowledge will keep growing, so not everything should be loaded into context.
+The default strategy is "load entrypoints first, then expand bodies on demand": read the root / base / role entrypoints to determine scope, then open only the `skill` or `note` bodies the current task actually needs.
 
 ## Default Loading Path
 
+The default order is:
+
 1. Read the root `AGENTS.md`
-2. Read the relevant role `AGENTS.md`
-3. If the task touches shared concerns, read `base/AGENTS.md`
-4. Read one relevant `skill` or `note`
-5. Read one more `note` or `questions.md` only if the task still needs more context
+2. Read the shared-layer `base/AGENTS.md`
+3. Read the relevant role `roles/<role>/AGENTS.md`
 
-## When to Escalate
+### Recommended Resident Context
 
-Read beyond the minimum set when:
+These files should, in principle, be loaded for every task:
 
-- the task has a concrete failure mode or symptom
-- the task has unusually high operational risk
-- the first `skill` or `note` is not enough to justify the next action
-- you need a known unknown from `questions.md`
+- Root `AGENTS.md`: collaboration rules, repository structure, and the global entrypoint
+- Shared-layer `base/AGENTS.md`: the shared skills / notes index
+- `roles/<role>/AGENTS.md`: role responsibilities and the role-layer knowledge index
 
-Do not bulk-load multiple notes by default.
+### Default On-Demand Loading
 
-## After Context Compression
+The following are loaded on demand by default:
 
-If you are no longer sure about:
+- `skill`: read after it is matched via indexes, summaries, or `triggers` in `AGENTS.md`
+- `note`: read on demand by default; prefer `kind: principle` when you need stronger rules, and `kind: insight` when you need decision framing or heuristics
+- More specific `note`: escalate further when you need evidence, boundary conditions, counterexamples, or decision context; if the repo contains `kind: experience`, that layer is usually read here
 
-- which roles are active
-- whether the task should use the shared layer
-- what the loading order is
+### Not Recommended As Resident Context
 
-re-read:
+These usually should not remain resident:
 
-1. root `AGENTS.md`
-2. the relevant role `AGENTS.md`
-3. `base/AGENTS.md` when shared concerns apply
+- Long background material
+- Full troubleshooting journals
+- Historical logs and one-off evidence
+- Fast-expiring fact snapshots, such as environment paths, versions, or cluster state
+
+These are better stored in more specific `note`s, runbooks, READMEs, or other inspectable artifacts that can be dated and verified.
+
+## When To Escalate
+
+Read beyond the minimum set when any of the following is true:
+
+- The task already has a concrete failure mode or symptom
+- The task has unusually high operational risk
+- The already-loaded `skill` or `note` is still not enough to justify the next action
+- You need a known unknown from `roles/<role>/questions.md`
+
+Do not bulk-load multiple notes by default. Prefer gradual escalation over pulling the whole knowledge base into context.
+
+## Reload After Context Compression
+
+In long sessions, context may be compressed. After compression, entrypoints and indexes may be reduced to summaries, and important details may be lost.
+
+If you are no longer sure about the following:
+
+- Which roles are currently active
+- What the correct loading order is
+- Whether a shared rule lives in an entrypoint or in a body note
+
+then context has likely been compressed. Re-read:
+
+1. The root `AGENTS.md`
+2. The shared-layer `base/AGENTS.md`
+3. The relevant role `roles/<role>/AGENTS.md`

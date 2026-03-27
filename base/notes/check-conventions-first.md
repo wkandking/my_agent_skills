@@ -1,27 +1,27 @@
 ---
 kind: principle
-description: "添加新功能前先查项目已有惯例（命名、迁移脚本、CLI 风格），避免风格不一致返工"
+description: "Check existing project conventions before adding new behavior, such as naming, migration scripts, and CLI style, to avoid rework caused by inconsistency."
 triggers:
-  - "新功能"
-  - "惯例"
-  - "命名规范"
-  - "迁移脚本"
+  - "new feature"
+  - "conventions"
+  - "naming conventions"
+  - "migration scripts"
 ---
 
-# 先查项目惯例再动手
+# Check Project Conventions Before Making Changes
 
-## 背景
+## Background
 
-在项目中添加新功能（如新增数据库列、新增迁移脚本、新增 CLI 命令）时，如果不先了解项目已有的惯例，容易创建出与项目风格不一致的实现，事后返工。
+When adding new behavior to a project, such as a database column, a migration script, or a CLI command, failing to check the project's existing conventions often leads to an implementation that does not match the surrounding style and later has to be redone.
 
-## 内容
+## Rules
 
-1. **加新功能前先查看同类功能的历史实现**：去 Git 历史中搜索类似的 PR 或 commit，了解项目惯例
-2. **优先复用已有模式**：如果项目已有统一的迁移脚本、配置加载方式、测试框架，遵循已有模式而非另起炉灶
-3. **不确定时问**：如果找不到先例，先和 reviewer 确认方案再动手
+1. **Review historical implementations of similar features before adding a new one**: search git history for similar PRs or commits to learn the project's conventions
+2. **Prefer reusing existing patterns**: if the project already has a standard migration style, config-loading approach, or test framework, follow it instead of inventing a new one
+3. **Ask when unsure**: if you cannot find a precedent, confirm the approach with the reviewer before implementing it
 
-## 示例
+## Examples
 
-正面：添加数据库列前，先查看上次加列的 PR，发现迁移逻辑统一放在某个 `migrate()` 函数里，测试脚本会自动调用。于是把新迁移追加到同一个函数末尾。
+Good: before adding a database column, review the last PR that added one and notice that migration logic is consistently placed in a `migrate()` function that test scripts call automatically. Append the new migration to the end of the same function.
 
-反面：没查历史就创建了独立的迁移脚本，导致测试前需要手动跑额外脚本、部署多一个步骤，最终还是要删掉重做。
+Bad: create a separate migration script without checking history first, which forces tests to run an extra manual step and adds another deployment step, only to be deleted and redone later.

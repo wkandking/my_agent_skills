@@ -1,6 +1,6 @@
 # Agent Knowledge Repo
 
-Before starting any task, every agent must read this file and the relevant role `AGENTS.md` files.
+Before starting any task, every agent must read this file, `base/AGENTS.md`, and the relevant role `AGENTS.md` files.
 
 ## Repository Structure
 
@@ -25,10 +25,10 @@ agent-knowledge-framework/
 
 ## Knowledge Loading and Sedimentation
 
-- Persistent context: `AGENTS.md` (this file) plus the relevant role `AGENTS.md` files
+- Persistent context: `AGENTS.md` (this file), `base/AGENTS.md`, and the relevant role `AGENTS.md` files
 - Layered loading: entrypoints first, then one relevant `skill` or `note`, then one more only if needed
 - Direct access for symptoms or high-risk work: when a task has a concrete failure mode or higher operational risk, go directly to the most relevant shared or role-specific `note`
-- After context compression: if you are no longer sure about the active roles, shared layer, or loading order, re-read this file, the relevant role `AGENTS.md`, and `base/AGENTS.md` when shared concerns apply
+- After context compression: if you are no longer sure about the active roles or loading order, re-read this file, `base/AGENTS.md`, and the relevant role `AGENTS.md`
 
 Detailed loading strategy (persistent vs on-demand context, layered escalation, and compression recovery) is documented in `base/notes/knowledge-loading.md`.
 

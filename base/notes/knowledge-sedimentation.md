@@ -1,9 +1,11 @@
 ---
 kind: principle
-description: "After important work, proactively consider sedimentation and choose the smallest stable target: AGENTS rule, note, skill, or question."
+description: "After important work, proactively consider whether knowledge should be sedimented, and choose the smallest stable target: an AGENTS rule, note, skill, or question."
 triggers:
-  - "sedimentation"
   - "knowledge sedimentation"
+  - "summary"
+  - "eat"
+  - "sedimentation"
   - "when to write a note"
   - "note kind"
   - "question vs note"
@@ -21,7 +23,7 @@ Choose the smallest target that preserves the value:
 
 - `AGENTS.md` rule
   - short, high-frequency entry rules
-  - repository layout hints
+  - repository structure hints
   - loading reminders needed at the start of work
 
 - `note`
@@ -52,14 +54,14 @@ If multiple roles would benefit, prefer `base/`.
 
 ## Extraction Flow
 
-1. keep the concrete event or evidence in view
-2. decide whether the reusable part is a rule, a heuristic, a historical case, a workflow, or an open question
-3. store it in the smallest stable target
-4. avoid creating multiple artifacts that repeat the same content
+1. Keep the concrete event or evidence in view
+2. Decide whether the reusable part is a rule, a heuristic, a historical case, a workflow, or an open question
+3. Store it in the smallest stable target
+4. Avoid creating multiple artifacts that repeat the same content
 
 ## Anti-Patterns
 
-- writing a long historical summary when only one short rule is reusable
+- writing a long historical summary when only one short reusable rule exists
 - turning a single anecdote into a universal principle too early
 - storing a workflow as a note instead of a skill
 - using `questions.md` as a generic TODO list

@@ -1,122 +1,123 @@
 ---
 kind: principle
-description: "多 agent 并行开发时使用 git worktree 隔离工作目录的规范"
+description: "Rules for isolating working directories with git worktree during multi-agent parallel development."
 triggers:
   - "worktree"
-  - "多 agent"
-  - "并行开发"
-  - "分支隔离"
+  - "multi-agent"
+  - "parallel development"
+  - "branch isolation"
+  - "write code"
 ---
 
-# Git Worktree 多 Agent 协作规范
+# Git Worktree Rules for Multi-Agent Collaboration
 
-## 背景
+## Background
 
-多个 agent 可能同时对本仓库进行读写操作。如果共用同一个工作目录，会产生文件冲突、脏状态和 merge 混乱。Git worktree 允许从同一个仓库创建多个独立的工作目录，每个 agent 在自己的 worktree 中工作，互不干扰。
+Multiple agents may read from and write to this repository at the same time. If they share one working directory, file conflicts, dirty state, and merge confusion become likely. Git worktree allows multiple isolated working directories to be created from the same repository, so each agent can work in its own worktree without interfering with others.
 
-## 核心规则
+## Core Rules
 
-1. **只读操作**可以直接在主 worktree（`main` 分支）进行
-2. **写操作**必须在独立 worktree 中进行，完成后通过 PR 合并
-3. 每个 worktree 对应一个独立分支，分支命名需包含 agent 标识
+1. **Quick read-only checks** may be done directly in the main worktree (`main` branch); but if exploration may turn into editing, start in an isolated worktree from the beginning
+2. **All write operations** must happen in an isolated worktree and be merged through a PR
+3. Each worktree must have its own branch, and the branch name must include an agent identifier
 
-## 工作流
+## Workflow
 
-### 创建 worktree
+### Create a worktree
 
 ```bash
-# 在仓库根目录执行
+# Run from the repository root
 git fetch origin
-git worktree add .claude/worktrees/<topic> -b <agent>/<topic> origin/main
+git worktree add .agents/worktrees/<topic> -b <agent>/<topic> origin/main
 
-# 示例
-git worktree add .claude/worktrees/add-new-skill -b alice/add-new-skill origin/main
+# Example
+git worktree add .agents/worktrees/add-new-skill -b alice/add-new-skill origin/main
 ```
 
-### 在 worktree 中工作
+### Work inside the worktree
 
 ```bash
-cd .claude/worktrees/add-new-skill
-# 正常编辑、commit
+cd .agents/worktrees/add-new-skill
+# Edit and commit normally
 git add ...
 git commit -m "..."
 git push -u origin alice/add-new-skill
 ```
 
-### 提交 PR 并清理
+### Open a PR and clean up
 
 ```bash
-# 推送后创建 PR
+# Create a PR after pushing
 git push -u origin alice/add-new-skill
-# 创建 PR → review → merge
+# Create PR -> review -> merge
 
-# 合并后清理 worktree
+# Clean up the worktree after merge
 cd /path/to/main-worktree
-git worktree remove .claude/worktrees/add-new-skill
+git worktree remove .agents/worktrees/add-new-skill
 git branch -d alice/add-new-skill
 ```
 
-### 同步 main 的最新变更
+### Sync the latest changes from main
 
 ```bash
-# 在 worktree 中拉取 main 的更新
+# Update main inside the worktree
 git fetch origin
 git rebase origin/main
 ```
 
-## 分支命名约定
+## Branch Naming Convention
 
 ```
 <agent-name>/<topic>
 ```
 
-示例：
+Examples:
 - `alice/add-new-skill`
 - `bob/update-docs`
 - `charlie/promote-principle`
 
-## 反模式：用 stash 跨分支搬改动
+## Anti-Pattern: Moving Changes Across Branches with Stash
 
-**不要**用 `git stash` + `git checkout` + `git stash pop` 把改动从一个分支搬到另一个分支，尤其当两个分支的文件结构不同时。
+Do **not** use `git stash` + `git checkout` + `git stash pop` to move changes from one branch to another, especially when the two branches have different file layouts.
 
-### 正确做法
+### Correct Approaches
 
-**方法一：worktree（推荐）**
+**Method 1: worktree (recommended)**
 
-从一开始就在 worktree 里操作，完全隔离：
+Work in a worktree from the start for full isolation:
 
 ```bash
-git worktree add .claude/worktrees/update-docs -b claude/update-docs origin/main
-cd .claude/worktrees/update-docs
-# 直接编辑文件，commit，push
-# 不会碰到任何 stash/冲突问题
+git worktree add .agents/worktrees/update-docs -b codex/update-docs origin/main
+cd .agents/worktrees/update-docs
+# Edit, commit, and push directly
+# This avoids stash-related conflicts entirely
 ```
 
-**方法二：精确 checkout 单个文件**
+**Method 2: checkout only the exact file**
 
-如果已经 stash 了，不要 `stash pop`，用 `git checkout` 只取需要的文件：
+If you already stashed changes, do not `stash pop`; use `git checkout` to restore only the file you need:
 
 ```bash
 git stash
-git worktree add .claude/worktrees/update-docs -b claude/update-docs origin/main
-cd .claude/worktrees/update-docs
-git checkout stash -- path/to/file.md   # 只取一个文件
+git worktree add .agents/worktrees/update-docs -b codex/update-docs origin/main
+cd .agents/worktrees/update-docs
+git checkout stash -- path/to/file.md   # restore only one file
 git stash drop
 ```
 
-### 经验总结
+### Summary
 
-| 场景 | 推荐做法 | 避免 |
+| Situation | Recommended | Avoid |
 |---|---|---|
-| 从已有分支拆出部分改动到新分支 | worktree 或 `git checkout stash -- <file>` | `git stash pop`（整体弹出） |
-| 两个分支文件结构不同 | worktree | stash 跨分支搬运 |
-| 只有一个文件要搬 | `git show stash:path > file` 或 `git checkout stash -- path` | `stash pop` 后手动清理 |
+| Split part of existing changes into a new branch | worktree or `git checkout stash -- <file>` | `git stash pop` (restore everything) |
+| Two branches have different file layouts | worktree | cross-branch stash transfer |
+| Only one file needs to be moved | `git show stash:path > file` or `git checkout stash -- path` | `stash pop` followed by manual cleanup |
 
-## 注意事项
+## Notes
 
-- 同一分支不能同时被多个 worktree checkout，git 会拒绝
-- worktree 中的 submodule 需要单独初始化：`git submodule update --init`
-- 完成工作后务必清理 worktree，避免残留占用磁盘
-- 如果 worktree 被意外删除（未用 `git worktree remove`），用 `git worktree prune` 清理记录
-- **创建 worktree 前必须 `git fetch origin`**，基于 `origin/main` 而非本地 `main`，否则可能基于过时代码开发导致 PR 冲突
-- **即使是「先探索一下」也应该在 worktree 里做**，因为探索很容易变成正式开发，事后再搬改动到 worktree 步骤繁琐且容易遗漏文件
+- The same branch cannot be checked out in multiple worktrees at the same time; git will reject it
+- Submodules inside a worktree must be initialized separately: `git submodule update --init`
+- Clean up worktrees after finishing to avoid leaving disk-consuming leftovers behind
+- If a worktree is deleted unexpectedly without `git worktree remove`, run `git worktree prune` to clean the records
+- **Always run `git fetch origin` before creating a worktree** and base it on `origin/main`, not local `main`, or you may start from stale code and create PR conflicts
+- **Any exploration that may turn into editing should happen in a worktree**, because exploration often turns into real development, and moving changes afterward is tedious and easy to get wrong

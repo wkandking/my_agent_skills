@@ -23,4 +23,5 @@ __pycache__/
 *.pyo
 
 # Agent worktrees (git worktree add ...)
+.agents/worktrees/
 .claude/worktrees/

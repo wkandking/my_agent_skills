@@ -297,7 +297,7 @@ comment 形成了 experience 之间、experience 与 insight/principle 之间的
 - experience：作为"证据/边界/反例"在需要时升级加载
 
 **触发式加载（特定场景自动提醒）**：
-- 接触凭证 / 权限 / token → 先读 `base/principles/credential-safety.md`
+- 接触凭证 / 权限 / token → 先读 `base/notes/credential-safety.md`
 - 任何写操作（多 agent 并行）→ 先读 worktree 相关规范
 
 ### Trigger：让知识主动找到 agent
@@ -328,7 +328,7 @@ triggers:
 
 对 experience 来说，这类**症状型 trigger** 尤其有价值——error message、异常现象这些具体线索，比抽象的主题描述更容易被精确命中，让 agent 直接跳到历史踩坑记录而不是从头排查。
 
-AGENTS.md 里的"触发型 skill"是更强的版本——直接写成硬性规则："接触凭证/权限/token 前**必须**先读 `base/principles/credential-safety.md`"。不是建议，是 preflight checklist。
+AGENTS.md 里的"触发型 skill"是更强的版本——直接写成硬性规则："接触凭证/权限/token 前**必须**先读 `base/notes/credential-safety.md`"。不是建议，是 preflight checklist。
 
 ### 联想：从一条知识到一片知识
 
@@ -397,14 +397,14 @@ agent-knowledge-framework/
 
 ## 知识加载与沉淀
 
-- **常驻 context**：`AGENTS.md`（本文件）+ `roles/<role>/AGENTS.md`
-- **按需加载（分层）**：角色/目录 `AGENTS.md` 索引 → skill/principle/insight → experience（按 `source` 或 "Escalate to experience if" 升级）
-- **症状/高风险直达**：出现特定报错或做迁移/发布/权限操作时，可直接用关键词检索 experience
-- **Context 压缩后**：如果你不确定索引内容或协作规则细节，说明 context 已被压缩，立即重新 `Read` 本文件 + 角色 `AGENTS.md`
+- **常驻 context**：`AGENTS.md`（本文件）+ `base/AGENTS.md` + `roles/<role>/AGENTS.md`
+- **按需加载（分层）**：入口 `AGENTS.md` 索引 → 一个相关 `skill` 或 `note` → 仍不够时再追加一个 `note` 或 `questions.md`
+- **症状/高风险直达**：出现特定报错，或做迁移 / 发布 / 权限操作时，可直接用关键词检索最相关的 `note`
+- **Context 压缩后**：如果你不确定索引内容或加载顺序，说明 context 已被压缩，立即重新 `Read` 本文件 + `base/AGENTS.md` + 角色 `AGENTS.md`
 
-详细的加载策略（常驻 vs 按需判断标准、experience 唤醒、摘要写法）见 **`base/principles/knowledge-loading.md`**。
+详细的加载策略（常驻 vs 按需判断标准、正文按需展开、Context 压缩后重载）见 **`base/notes/knowledge-loading.md`**。
 
-完成重要工作后（PR review 修复、跨层 bug 修复、首次跑通流程、踩坑），agent 应主动沉淀经验。知识分类（experience/skill/principle/insight）、存放位置判断、提炼流程和反模式，见 **`base/knowledge-sedimentation.md`**。
+完成重要工作后（PR review 修复、跨层 bug 修复、首次跑通流程、踩坑），agent 应主动考虑是否需要沉淀知识。知识分类、存放位置判断、提炼流程和反模式，见 **`base/notes/knowledge-sedimentation.md`**。
 
 ## 多 Agent 协作规则
 
@@ -417,7 +417,7 @@ Agent 工作中涉及两类仓库，规则同样适用：
 
 ### 1. 所有写操作必须在 worktree 中进行，禁止直接 push main
 
-**始终创建 worktree**，不要在主工作目录中 `git checkout` 或 `git checkout -b` 切分支。只读操作可以在 main 上进行。
+**始终创建 worktree**，不要在主工作目录中 `git checkout` 或 `git checkout -b` 切分支。快速只读检查可以在 main 上进行，但只要探索可能演变成编辑，就应直接进入 worktree。
 
 **常见违规模式（禁止）**：
 - `git checkout -b <branch>` 然后直接在主工作目录编辑——这不是 worktree，只是切了分支
@@ -426,15 +426,15 @@ Agent 工作中涉及两类仓库，规则同样适用：
 **正确流程**：
 ```bash
 git fetch origin
-git worktree add .claude/worktrees/<topic> -b <agent>/<topic> origin/main
-cd .claude/worktrees/<topic>
+git worktree add .agents/worktrees/<topic> -b <agent>/<topic> origin/main
+cd .agents/worktrees/<topic>
 # ... 编辑、commit ...
 git push -u origin <agent>/<topic>
 ```
 
-**关键**：永远基于 `origin/main` 创建 worktree，不要基于本地 `main`（可能过时）。详见 `base/principles/git-worktree.md`。
+**关键**：永远基于 `origin/main` 创建 worktree，不要基于本地 `main`（可能过时）。详见 `base/notes/git-worktree.md`。
 
-> **检查点**：执行任何 `git checkout -b` 或文件编辑前，先问自己"我现在在 worktree 里吗？"。如果 `pwd` 不包含 `.claude/worktrees/`，停下来，先创建 worktree。
+> **检查点**：执行任何 `git checkout -b` 或文件编辑前，先问自己"我现在在 worktree 里吗？"。如果 `pwd` 不包含 `.agents/worktrees/`，停下来，先创建 worktree。
 
 ### 2. 通过 PR 合并，agent 不要自行 merge
 
@@ -449,7 +449,7 @@ git push -u origin <agent>/<topic>
 ### 4. 完成后清理 worktree
 
 ```bash
-git worktree remove .claude/worktrees/<topic>
+git worktree remove .agents/worktrees/<topic>
 git branch -d <agent>/<topic>
 ```
 
@@ -467,7 +467,7 @@ git branch -d <agent>/<topic>
 
 ### 3）触发型 skill：要做事先读（硬性）
 
-- 接触凭证 / 权限 / token → 先读 `base/principles/credential-safety.md`
+- 接触凭证 / 权限 / token → 先读 `base/notes/credential-safety.md`
 - 长任务（>30min / 需归档）→ 相关原则
 
 ### 4）确认"本地=最新"
