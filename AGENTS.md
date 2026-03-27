@@ -4,8 +4,25 @@ Before starting any task, every agent must read this file and the relevant role 
 
 ## Repository Structure
 
-- `base/` stores shared knowledge used across roles
-- `roles/` stores role-specific knowledge and entrypoints
+```text
+agent-knowledge-framework/
+├── AGENTS.md                  # root entrypoint
+├── base/                      # shared knowledge across roles
+│   ├── AGENTS.md              # shared entrypoint
+│   ├── skills/                # shared executable workflows
+│   └── notes/                 # shared principles / insights / experiences
+├── roles/                     # role-specific knowledge
+│   ├── generalist-engineer/
+│   ├── mechanism-analyst/
+│   ├── performance-infra-tester/
+│   └── <role>/
+│       ├── AGENTS.md          # role description + index
+│       ├── skills/            # role-specific workflows
+│       ├── notes/             # role-specific principles / insights / experiences
+│       └── questions.md       # known unknowns
+├── tools/                     # validation and maintenance scripts
+└── archive/                   # inactive or historical knowledge
+```
 
 ## Active Roles
 
