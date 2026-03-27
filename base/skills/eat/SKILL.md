@@ -41,6 +41,8 @@ Whether in normal sedimentation mode or while maintaining `eat` itself:
 - all writable candidate items must use stable numbering like `1. 2. 3.`
 - writing happens only after explicit user confirmation
 - the user may confirm everything or only a subset, such as `1 approve` or `1 3 approve`
+- user-facing proposals and explanations default to Chinese
+- persisted content written into the knowledge repository defaults to English unless the user explicitly requests another language
 
 ### 2. Prefer the best available sources
 
@@ -96,6 +98,7 @@ After the user confirms, execute writes with these rules:
 6. Write only the items the user explicitly confirmed
 7. If a confirmation cannot be mapped unambiguously to item numbers, restate the recognized set and wait for clarification
 8. If the confirmed target is a `skill`, switch to `skill-creator-codex`
+9. Unless the user explicitly requests another language, keep user-facing communication in Chinese but write persisted repository content in English
 
 For `eat` self-maintenance:
 

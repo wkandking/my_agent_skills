@@ -47,6 +47,12 @@ Additional fields appear only when needed:
 - `skill`: add `Skill Handoff`
 - if there is risk or unclear boundary: add `Risk`
 
+Language rule:
+
+- explanations shown to the user default to Chinese
+- `Draft` content intended to be written into repository files defaults to English
+- if the user explicitly requests another language, follow the user's request
+
 `Skill Handoff` uses this minimal field set:
 
 ```md
