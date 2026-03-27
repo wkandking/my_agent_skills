@@ -11,8 +11,6 @@ triggers:
   - "可观察性"
   - "黑盒 agent"
   - "上下文工程"
-source:
-  - "base/insights/visible-workflow-state-over-hidden-agent-features.md"
 ---
 
 # Insight: 外显工作状态优于黑盒 agent 特性

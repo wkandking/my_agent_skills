@@ -6,8 +6,6 @@ triggers:
   - "惯例"
   - "命名规范"
   - "迁移脚本"
-source:
-  - "base/principles/check-conventions-first.md"
 ---
 
 # 先查项目惯例再动手

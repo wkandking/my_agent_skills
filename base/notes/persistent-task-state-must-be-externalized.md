@@ -8,9 +8,6 @@ triggers:
   - "long-running task"
   - "task log"
   - "observability"
-source:
-  - "base/principles/persistent-task-state-must-be-externalized.md"
-  - "base/insights/visible-workflow-state-over-hidden-agent-features.md"
 ---
 
 # Persistent Task State Must Be Externalized

@@ -7,8 +7,6 @@ triggers:
   - "token"
   - "API key"
   - "安全"
-source:
-  - "base/principles/credential-safety.md"
 ---
 
 # 凭证安全原则

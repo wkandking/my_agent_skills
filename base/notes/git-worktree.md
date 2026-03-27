@@ -6,8 +6,6 @@ triggers:
   - "多 agent"
   - "并行开发"
   - "分支隔离"
-source:
-  - "base/principles/git-worktree.md"
 ---
 
 # Git Worktree 多 Agent 协作规范

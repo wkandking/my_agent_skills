@@ -6,8 +6,6 @@ triggers:
   - "直标"
   - "图例"
   - "benchmark 图表"
-source:
-  - "roles/performance-infra-tester/insights/line-chart-labeling.md"
 ---
 
 # 密集折线图标注

@@ -8,8 +8,6 @@ triggers:
   - "/tmp"
   - "OOM kill"
   - "Exit Code 137"
-source:
-  - "base/principles/explicit-tmpdir-for-long-jobs.md"
 ---
 
 # 长任务必须显式指定临时目录（禁止默认 `/tmp`）

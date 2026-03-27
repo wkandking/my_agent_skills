@@ -6,8 +6,6 @@ triggers:
   - "总体赢家"
   - "可比性"
   - "部署变量"
-source:
-  - "roles/performance-infra-tester/principles/scenario-comparability.md"
 ---
 
 # 场景可比性规则

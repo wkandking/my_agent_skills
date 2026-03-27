@@ -23,8 +23,7 @@ my_agent_skills/
 │   ├── generalist-engineer/
 │   ├── mechanism-analyst/
 │   └── performance-infra-tester/
-├── tools/
-└── archive/
+└── tools/
 ```
 
 ## Active Roles

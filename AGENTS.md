@@ -20,8 +20,7 @@ agent-knowledge-framework/
 │       ├── skills/            # role-specific workflows
 │       ├── notes/             # role-specific principles / insights / experiences
 │       └── questions.md       # known unknowns
-├── tools/                     # validation and maintenance scripts
-└── archive/                   # inactive or historical knowledge
+└── tools/                     # validation and maintenance scripts
 ```
 
 ## Knowledge Loading and Sedimentation

@@ -7,8 +7,6 @@ triggers:
   - "为什么这样工作"
   - "结果和预期不一致"
   - "数据库原理分析"
-source:
-  - "roles/mechanism-analyst/principles/trace-query-behavior-from-result-to-source.md"
 ---
 
 # 从结果追到源码的最小闭环

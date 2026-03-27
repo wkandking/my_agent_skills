@@ -8,8 +8,6 @@ triggers:
   - "OrderedDistinct"
   - "Conditional Traverse"
   - "GxB_ANY_PAIR_BOOL"
-source:
-  - "roles/mechanism-analyst/experience/2026-03-26-distinct-mechanism-across-falkordb-and-neo4j.md"
 ---
 
 # 2026-03-26 FalkorDB 与 Neo4j 中 `WITH DISTINCT` 的机制差异

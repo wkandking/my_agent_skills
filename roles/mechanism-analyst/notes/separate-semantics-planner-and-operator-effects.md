@@ -8,8 +8,6 @@ triggers:
   - "可达性"
   - "优化器重排"
   - "Distinct 算子"
-source:
-  - "roles/mechanism-analyst/insights/separate-semantics-planner-and-operator-effects.md"
 ---
 
 # 先分离语义、规划器、算子三层原因
