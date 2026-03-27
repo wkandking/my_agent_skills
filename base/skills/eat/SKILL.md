@@ -59,11 +59,21 @@ For mixed-source sets:
 - mark unreadable or unsupported sources as `skipped: <reason>`
 - do not abandon the whole set just because one source failed
 
-### 3. Do not store content that is not worth reusing
+### 3. Distinguish object knowledge from process knowledge first
+
+Before proposing candidate items in normal mode, decide what the user is actually trying to preserve:
+
+- if the user is mainly asking what is reusable about the subject itself, prioritize topic knowledge
+- if the user is mainly asking how the research, analysis, or problem-solving was done, prioritize process knowledge and workflow candidates before topic notes
+- when the source is primarily the current conversation, explicitly check all three candidate classes: topic knowledge, process knowledge, and skill candidate
+- if the conversation shows a stable multi-step workflow with repeatable inputs and outputs, propose at least one `skill` candidate instead of defaulting to notes only
+- for mechanism-analysis conversations, check role-layer reusable assets first: `insight/principle` for analysis heuristics, `experience` for full case studies, and `skill` for end-to-end investigation workflows
+
+### 4. Do not store content that is not worth reusing
 
 Whether something should be sedimented and what type it should become is governed by `base/notes/knowledge-sedimentation.md`.
 
-### 4. Hand off `skill` items to `skill-creator-codex`
+### 5. Hand off `skill` items to `skill-creator-codex`
 
 When a candidate item is classified as a `skill`:
 
@@ -77,6 +87,14 @@ For each candidate item, make two decisions first:
 
 1. whether it is worth sedimenting
 2. if yes, what target and path it should use
+
+When the evidence mainly comes from the current conversation, run this check explicitly before drafting candidates:
+
+1. topic knowledge: stable conclusions about the object under discussion
+2. process knowledge: reusable ways of framing questions, layering analysis, validating claims, or restructuring findings
+3. skill candidate: a stable multi-step workflow with recognizable inputs, outputs, and handoff shape
+
+If repeated steps such as framing a system model, adding concrete examples, tracing source code, validating boundaries, and restructuring the final document appear in the conversation, do not stop at `note` candidates only; propose whether that workflow should become a `skill`.
 
 Do not redefine the detailed criteria here:
 
