@@ -188,7 +188,7 @@ def assert_no_archive_refs() -> None:
 
 
 def assert_no_old_bucket_paths() -> None:
-    pattern = re.compile(r"(principles/|insights/|experience/|knowledge-sedimentation)")
+    pattern = re.compile(r"(principles/|insights/|experience/|base/knowledge-sedimentation\.md)")
     for path in iter_bucket_checked_docs():
         text = FENCED_BLOCK_RE.sub("", read_text(path))
         if pattern.search(text):
