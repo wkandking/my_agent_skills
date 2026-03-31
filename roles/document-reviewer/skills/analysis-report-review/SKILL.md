@@ -12,6 +12,7 @@ description: Use when reviewing analysis docs, experiment reports, or investigat
 ## Use This Skill When
 
 - 评审分析报告、实验结论、问题分析、复盘中的分析部分
+- 先读 `base/notes/check-conventions-first.md`，避免忽略已有评审和命名约定
 
 ## Core Review Dimensions
 
