@@ -12,6 +12,7 @@ agent-knowledge-framework/
 │   ├── skills/                # shared executable workflows
 │   └── notes/                 # shared principles / insights / experiences
 ├── roles/                     # role-specific knowledge
+│   ├── document-reviewer/
 │   ├── generalist-engineer/
 │   ├── mechanism-analyst/
 │   ├── performance-infra-tester/
