@@ -12,6 +12,7 @@ description: Use when reviewing technical design docs, proposals, or architectur
 ## Use This Skill When
 
 - 评审技术设计、方案、架构提案、ADR 风格文档
+- 先读 `base/notes/check-conventions-first.md`，避免忽略已有评审和命名约定
 
 ## Core Review Dimensions
 
@@ -28,7 +29,7 @@ description: Use when reviewing technical design docs, proposals, or architectur
 2. 提取范围、非目标、假设和约束
 3. 检查方案是否真正回答了问题
 4. 检查实现、风险、发布和回滚覆盖是否完整
-5. 将阻塞性问题和建议性问题分开
+5. 将阻塞性问题和建议性问题分开，并把前者放进 `Findings`
 
 ## Output Shape
 
