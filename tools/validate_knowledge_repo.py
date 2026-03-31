@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ACTIVE_ROLES = [
+    "document-reviewer",
     "generalist-engineer",
     "mechanism-analyst",
     "performance-infra-tester",

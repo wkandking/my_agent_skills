@@ -20,6 +20,7 @@ my_agent_skills/
 │   ├── skills/
 │   └── notes/
 ├── roles/
+│   ├── document-reviewer/
 │   ├── generalist-engineer/
 │   ├── mechanism-analyst/
 │   └── performance-infra-tester/
@@ -28,6 +29,7 @@ my_agent_skills/
 
 ## Active Roles
 
+- `document-reviewer`: reviews design docs and analysis/report docs for scope, evidence, and decision quality
 - `generalist-engineer`: default role for day-to-day engineering work
 - `mechanism-analyst`: explains why a system behaves the way it does
 - `performance-infra-tester`: handles benchmark, load, stress, and performance reporting work
